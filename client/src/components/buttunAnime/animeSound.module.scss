@@ -1,0 +1,90 @@
+
+.wrapper_sound{
+  min-height: 40px;
+  width: 16px;
+  cursor: pointer;   
+  background-color:#acacac;
+  // padding: 2px;
+}
+.line{   
+    position: relative;
+    width: 16px;
+    height: 1px;    
+    background-color: rgb(28, 25, 25);
+    margin-bottom: 2px;   
+&:nth-child(2n){
+width: 8px; }
+span{ 
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;  
+        width: 16px;
+        background-color: #ffffff;   
+        height: 1px;    
+      }
+&:nth-child(1) span{
+animation: 474ms infinite alternate sound2;
+}
+&:nth-child(2) span{
+animation: 433ms infinite alternate sound2;
+}
+&:nth-child(3) span{
+animation: 407ms infinite alternate sound2;
+}
+&:nth-child(4) span{
+animation: 458ms infinite alternate sound2;
+}
+&:nth-child(5) span{
+animation: 400ms infinite alternate sound2;
+}
+&:nth-child(6) span{
+animation: 427ms infinite alternate sound2;
+}
+&:nth-child(7) span{
+animation: 441ms infinite alternate sound2;
+}
+&:nth-child(8) span{
+animation: 419ms infinite alternate sound2;
+}
+&:nth-child(9) span{
+animation: 487ms infinite alternate sound2;
+}
+&:nth-child(10) span{
+animation: 442ms infinite alternate sound2;
+}
+&:nth-child(11) span{
+animation: 500ms infinite alternate sound2;
+}
+&:nth-child(12) span{
+animation: 320ms infinite alternate sound2;
+}
+&:nth-child(13) span{
+animation: 442ms infinite alternate sound2;
+}
+&:nth-child(14) span{
+animation: 678ms infinite alternate sound2;
+}
+&:nth-child(15) span{
+animation: 442ms infinite alternate sound2;
+}
+&:nth-child(16) span{
+animation: 233ms infinite alternate sound2;
+} 
+}
+@keyframes sound1 {
+  0% {
+    width: 0;    
+  }
+  100% {    
+    width: 97%;    
+  }
+}
+@keyframes sound2 {
+  0% {
+    width: 0;    
+  }
+  100% {    
+    width: 97%;    
+  }
+}
