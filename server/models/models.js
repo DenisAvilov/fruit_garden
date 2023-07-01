@@ -1,5 +1,5 @@
 const sequelize = require('../db')
-const {DataTypes} = require('sequelize')
+const {DataTypes, INTEGER} = require('sequelize')
 
 const User = sequelize.define('user',{
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
@@ -17,11 +17,12 @@ const Token = sequelize.define('token',{
 
 const Basket = sequelize.define('basket',{
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-  // user_id: {type: DataTypes.STRING, unique: true}  
+   
 })
 
 const BasketProduct = sequelize.define('basket_product',{
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+  
   // user_id: {type: DataTypes.STRING, unique: true}  
 })
 const Product = sequelize.define('product',{

@@ -59,15 +59,11 @@ class UserController {
       }
   } 
   
-  // async refresh(req, res, next) {
-  //     try{}
-  //     catch(e){
-  //       return next(ApiError.badRequest("Refresh Token not good"))
-  //     }
-  // }
+ 
   async logout(req, res, next) {
       try{
-        const {refreshToken} = req.cookies
+        const {refreshToken} = req.cookies 
+        console.log(refreshToken, 'refreshToken')      
         await userService.logout(refreshToken)
         res.clearCookie('refreshToken') 
         return res.json(200)
@@ -77,6 +73,8 @@ class UserController {
       }
   }
   async check(req, res, next){
+    console.log('server check', req.user.userId)
+    console.log('server check', req.cookies.refreshToken)
       try{
          const token = await tokenService.saveToken(req.user.userId, req.cookies.refreshToken)  
          res.json(token)
@@ -86,19 +84,22 @@ class UserController {
       }
     }
     
-    async getall(req, res, next) {
-
+  async getall(req, res, next) {
        try{
+       
          const {limit, limitPage} = req.query
-         const {limits, limitPages} = await limitPages.limitPage(limit, limitPage)
-         const users = await userService.getall(limits, limitPages)
+         
+         const rez = await limitPages.limitPage(limit, limitPage)
+         console.log('rez', rez)
+         const users = await userService.getall(rez.limit, rez.offset)
+        //  const users = await userService.getall()
          return res.json(users)
        }
        catch(e){
          return next(ApiError.badRequest("Помилка при валидації всіх корестувачів", e))
        }
     }
-    async getUser(req, res, next) {
+  async getUser(req, res, next) {
        try{        
          const {id} = req.params        
          if(!id){
@@ -111,22 +112,22 @@ class UserController {
          return next(ApiError.badRequest("Помилка при валидації всіх корестувачів", e))
        }
     }
-    // async update(id, data) {
-    //     const user = await UserMapping.findByPk(id)
-    //     if (!user) {
-    //         throw new Error('Пользователь не найден в БД')
-    //     }
-    //     const {
-    //         email = user.email,
-    //         password = user.password,
-    //         role = user.role
-    //     } = data
-    //     await user.update({email, password, role})
-    //     return user
-    // }
 
-  
-    async delete(req, res, next) {
+     async refresh(req, res, next) {
+      try{
+        const {refreshToken} = req.cookies
+       
+        const  userData = await userService.refresh(refreshToken)
+      
+        // res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 1000, httpOnly})
+        console.log('userController userData: >', userData)
+        return res.json(userData)
+      }
+      catch(e){  
+        return next(ApiError.badRequest("Refresh Token not good"))
+      }
+  }
+  async delete(req, res, next) {
       try{
          const {id} = req.params   
          const {refreshToken}  = req.cookies    

@@ -1,12 +1,19 @@
-const {BasketProduct, Product} = require('../models/models')
+const {BasketProduct, Product, User, Basket} = require('../models/models')
 class BasketProductController{
  async  createBasketProduct(req,res){
-    const {id} = req.query
+    
+    // const {id, userID} = req.query
+    const {productId, userID} = req.body
+console.log('basketProductController', productId, userID)
+    var basket = await Basket.findOne({where: {user_id:userID}})
+
+   basket = basket ? basket : Basket.create({userId: userID})
+
     const rez = await Product.findOne({
-        where: {id},          
+        where: {id: productId},          
    })
     const basketProduct = await BasketProduct.create({
-      where: {rez}
+      where: {basket , rez}
     })
     return res.json(basketProduct)
   }

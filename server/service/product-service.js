@@ -59,7 +59,7 @@ async update(id,body ,img){
           const categoryId = body.categoryId ?? product.categoryId
    if(!img){
             fileName = product.img
-            console.log('Файл Остался Без Змін', fileName);
+            // console.log('Файл Остался Без Змін', fileName);
           }
           else{ 
             const pathImg = product.img            
@@ -68,7 +68,7 @@ async update(id,body ,img){
             let fs = require('fs');
             fs.unlink(path.resolve(__dirname, '..','static',pathImg) , err => {
             if(err) throw err;
-            console.log('Файл успешно удалён', pathImg);
+            // console.log('Файл успешно удалён', pathImg);
           });
             
           } 
@@ -83,7 +83,7 @@ async delete(id){
             let fs = require('fs');
             fs.unlink(path.resolve(__dirname, '..','static', product.img) , err => {
             if(err) throw err;
-            console.log('Файл успешно удалён');
+            // console.log('Файл успешно удалён');
           });
             await product.destroy()
             return product

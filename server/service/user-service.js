@@ -73,12 +73,9 @@ class UserService{
        return user
   }
   
-  async getall(limit, limitPage){
-  // let {id, limit, page} = req.query    
-  //    page = page || 1 // если страница не указана то отображать первую
-  //    limit = limit || 2 //если лимит не указан то отображать будим по 9 стр. на каждой странице
-  //    let offset = page * limit - limit      
-    const users = await User.findAndCountAll({ limit, limitPage})       
+  async getall(limit, offset){
+   
+    const users = await User.findAndCountAll({ limit, offset})    
     return users
   }  
   async getUser(id){
@@ -87,5 +84,24 @@ class UserService{
     console.log(users)
     return users
   } 
+
+  async refresh(refreshToken){
+    if(!refreshToken){
+      throw ApiError.UnauthorizedError()
+    }    
+    const userData = await tokenService.validateRefreshToken(refreshToken)
+    const tokenFromDb = await tokenService.findToken(refreshToken) 
+
+    if(!userData || !tokenFromDb){
+      console.log('1',userData , '2',tokenFromDb)  
+       throw ApiError.UnauthorizedError()
+    }
+        
+    const user = await User.findByPk(userData.userId)
+    const userDto = new UserDto(user)
+     const tokens = tokenService.generateTokens({...userDto})
+     await tokenService.saveToken(userDto.userId, tokens.refreshToken)      
+     return {...tokens, user: userDto}
+  }
 }
 module.exports = new UserService()
