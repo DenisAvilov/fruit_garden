@@ -40,7 +40,7 @@ class UserController {
       }
       const {email, password} = req.body   
       const userData = await userService.login(email, password)
-      res.cookie( 'refreshToken',userData.refreshToken,{maxAge: 30*24*60*1000, httpOnly: true})  
+      res.cookie( 'refreshToken',userData.refreshToken,{maxAge: 30*24*60*1000, httpOnly: true})
       return res.json(userData)
      }
      catch(e){
@@ -51,6 +51,7 @@ class UserController {
    async activate(req, res, next) {       
       try{
         const {link} = req.params
+        console.log('link', link)
         await userService.activateLink(link, next)
        return res.redirect(process.env.CLIENT_URL)
       }

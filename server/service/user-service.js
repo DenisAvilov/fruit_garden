@@ -25,6 +25,7 @@ class UserService{
         activationLink
       })
       // await mailService.sendActivationMail(email, `${process.env.API_URL}/api/user/activate/${activationLink}`)
+     
       const userDto = new UserDto(user)// userId, email, activationLink, role
       //Создаем карзину для пользователя
       // const basket = await Basket.create({userId: user.id})      
@@ -49,7 +50,7 @@ class UserService{
      const userDto = new UserDto(user)
      const tokens = tokenService.generateTokens({...userDto})
      await tokenService.saveToken(userDto.userId, tokens.refreshToken)      
-     return {...tokens, user: userDto}
+     return {tokens, user: userDto}
   }
   async activateLink(activateLink, next){
         const user = await  User.findOne({activateLink})

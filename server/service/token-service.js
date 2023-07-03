@@ -3,7 +3,7 @@ const {Token} = require('../models/models')
 const ApiError = require('../error/ApiError')
 class TokenService{
    generateTokens(preload){
-    const accessToken = jwt.sign(preload, process.env.JWT_ACCESS_TOKEN, {expiresIn: '30s'})
+    const accessToken = jwt.sign(preload, process.env.JWT_ACCESS_TOKEN, {expiresIn: '30min'})
     const refreshToken = jwt.sign(preload, process.env.JWT_REFRESH_TOKEN, {expiresIn: '30d'})
     return{
       accessToken,
