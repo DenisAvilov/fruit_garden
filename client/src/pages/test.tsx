@@ -4,14 +4,14 @@ import CustomLink from '../components/cCustomLink'
 // import Link from '@mui/material/Link'
 import React from 'react'
 import AnimeSound from '../components/buttunAnime/animeSound'
+import { useDispatch, useSelector } from 'react-redux'
 
 const Test: React.FC = () => {
-	const out = () => {
-		console.log('out')
-	}
-	const move = () => {
-		console.log('move')
-	}
+	const out = () => {}
+	const move = () => {}
+
+	const dispatch = useDispatch()
+
 	return (
 		<>
 			<h1>Привет, я функциональная компонента</h1>
@@ -23,6 +23,7 @@ const Test: React.FC = () => {
 				<h3>Home My Live</h3>
 			</CustomLink>
 			<div>LINIU</div>
+
 			<AnimeSound onMouseEnter={move} onMouseLeave={out} />
 		</>
 	)

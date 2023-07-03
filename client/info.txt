@@ -12,3 +12,42 @@ https://alvarotrigo.com/blog/react-carousels/
 
 Реализация плавной прокрутки
 digitalocean.com/community/tutorials/how-to-implement-smooth-scrolling-in-react-ru
+
+
+
+server/
+
+client 
+    ├── pages/
+    │   ├── index.js
+    │   └── ...
+    ├── public/
+    │   ├── favicon.ico
+    │   └── ...
+    ├── src/
+    │   ├── components/
+    │   │   └── ...
+    │   ├── pages/
+    │   │   ├── api/
+    │   │   │    └──user/
+    │   │   │       └──signin.ts
+    │   │   │  
+    │   │   ├── app/
+    │   │   │      └──singin.tsx
+    │   │   │
+    │   │   │
+    │   │   ├── _app.tsx
+    │   │   │
+    │   │   ├── _document.tsx
+    │   │   └── ...
+    │   ├── store/
+    │   │   ├── slice/ 
+    │   │   │      └──authSlice.ts
+    │   │   ├── index.ts
+    │   │   └── ...
+    │   ├── types/
+    │   │      └── user.ts
+    │   │         
+    │   └── ...
+    ├── package.json
+    └── ...

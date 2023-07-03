@@ -1,5 +1,6 @@
 import * as React from 'react'
 import MyLink from '@/Link'
+
 import { styled, alpha } from '@mui/material/styles'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
@@ -11,19 +12,39 @@ import Menu from '@mui/material/Menu'
 import SearchIcon from '@mui/icons-material/Search'
 import InsertEmoticonOutlinedIcon from '@mui/icons-material/InsertEmoticonOutlined'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
-import CustomSearch from './cSearch'
+import CustomSearch from '../cSearch'
 import { Avatar, ListItemAvatar, Slide, useScrollTrigger } from '@mui/material'
-import PositionedCategory from './cPositionedCategory'
+import PositionedCategory from '../cPositionedCategory'
 import theme from '@/theme'
-import Link from './../components/cCustomLink'
+import Link from '../cCustomLink'
+import { useSelector } from 'react-redux'
+import { selectStatus } from '@/store/slice/authSlice'
+import auth from '../../pages/api/user/signin'
+import { parseCookies } from 'nookies'
+import { useRouter } from 'next/router'
+
 export const BrighterIconButton = styled(IconButton)(({ theme }) => ({
 	'&:hover': {
 		backgroundColor: theme.palette.primary.main,
 	},
 }))
 
-export default function AppMenu(props: any) {
-	// console.log('children :' + children, +' ' + 'window :' + window)
+export default function AppMenu(props?: any) {
+	const sx = props.sx
+
+	const router = useRouter()
+
+	const goHome = () => {
+		router.push('/')
+	}
+
+	const basketRoute = () => {
+		router.push('/basket')
+	}
+
+	const status = useSelector(selectStatus)
+	
+	
 
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -45,6 +66,14 @@ export default function AppMenu(props: any) {
 		handleMobileMenuClose()
 	}
 
+	const logoutt = async () => {
+		const cookies = parseCookies()
+		
+		const rez = await auth.logOut(cookies)
+		
+		handleMenuClose()
+	}
+
 	const menuId = 'primary-search-account-menu'
 	const renderMenu = (
 		<Menu
@@ -62,12 +91,20 @@ export default function AppMenu(props: any) {
 			open={isMenuOpen}
 			onClose={handleMenuClose}
 		>
-			<Link href={'/app/signUp'}>
-				<MenuItem onClick={handleMenuClose}>Реєстрація</MenuItem>
+			<Link href={status ? '/admin' : '/registration'}>
+				<MenuItem onClick={handleMenuClose}>
+					{status ? 'Мій кабінет' : 'Реєстрація'}
+				</MenuItem>
 			</Link>
-			<Link href='/app/signIn'>
-				<MenuItem onClick={handleMenuClose}>Вхід</MenuItem>
-			</Link>
+			{status ? (
+				<Link href='/'>
+					<MenuItem onClick={logoutt}>Вихід</MenuItem>
+				</Link>
+			) : (
+				<Link href='/login'>
+					<MenuItem onClick={handleMenuClose}>Вхід</MenuItem>
+				</Link>
+			)}
 		</Menu>
 	)
 
@@ -131,9 +168,9 @@ export default function AppMenu(props: any) {
 
 	return (
 		<>
-			<Box sx={{ flexGrow: 1 }}>
+			<Box sx={{ flexGrow: 1, marginBottom: '20px' }}>
 				<AppBar
-					position='fixed'
+					position={sx ? 'relative' : 'fixed'}
 					elevation={1}
 					sx={{
 						top: 0,
@@ -147,7 +184,10 @@ export default function AppMenu(props: any) {
 					}}
 				>
 					<Toolbar>
-						<Box component={'a'} href={'#'} sx={{ marginRight: 2.5 }}>
+						<Box
+							onClick={() => goHome()}
+							sx={{ marginRight: 2.5, cursor: 'pointer' }}
+						>
 							<Avatar
 								alt='Profile Picture'
 								src={logoImg}
@@ -160,8 +200,9 @@ export default function AppMenu(props: any) {
 							<CustomSearch />
 							<BrighterIconButton
 								size='large'
-								aria-label='show 17 new notifications'
+								aria-label='Карзина'
 								color='secondary'
+								onClick={() => basketRoute()}
 								sx={{
 									'&:hover': {
 										backgroundColor: `${theme.palette.secondary.light}`,
