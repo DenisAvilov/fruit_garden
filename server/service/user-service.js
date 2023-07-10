@@ -60,8 +60,8 @@ class UserService{
         user.isActivated = true
         await user.save()
       }  
-  async logout(refreshToken){
-    const token = await tokenService.removeToken(refreshToken)
+  async logout(refreshToken){     
+    const token = await tokenService.removeToken(refreshToken)    
     return token
   }   
   async userDelete(id, refreshToken){    
@@ -86,23 +86,5 @@ class UserService{
     return users
   } 
 
-  async refresh(refreshToken){
-    if(!refreshToken){
-      throw ApiError.UnauthorizedError()
-    }    
-    const userData = await tokenService.validateRefreshToken(refreshToken)
-    const tokenFromDb = await tokenService.findToken(refreshToken) 
-
-    if(!userData || !tokenFromDb){
-      console.log('1',userData , '2',tokenFromDb)  
-       throw ApiError.UnauthorizedError()
-    }
-        
-    const user = await User.findByPk(userData.userId)
-    const userDto = new UserDto(user)
-     const tokens = tokenService.generateTokens({...userDto})
-     await tokenService.saveToken(userDto.userId, tokens.refreshToken)      
-     return {...tokens, user: userDto}
-  }
 }
 module.exports = new UserService()

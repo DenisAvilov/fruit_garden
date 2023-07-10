@@ -8,15 +8,8 @@ const {User, Basket, Token} = require('../models/models')
 const {validationResult} = require('express-validator')
 const limitPages = require('../controllers/helpers/helpers')
 //Кешируем данние 1 параметрам передаеться прилоад, 2 передаеться секретний ключ, 3 время жизни токена
-const generateJWT = (id, email, role)=>{
-       return jwt.sign(
-        {id, email, role},
-         process.env.SECRET_KEY,
-         {expiresIn: '24h'}
-         )
-      }
 class UserController {
-   async registration(req, res, next){
+  async registration(req, res, next){
     try{
       const errors = validationResult(req)
       if(!errors.isEmpty()){
@@ -32,39 +25,35 @@ class UserController {
       return next(e)
     }
     }
-   async login(req, res, next){
+  async login(req, res, next){
      try{
       const errors = validationResult(req)
       if(!errors.isEmpty()){
         throw ApiError.badRequest("Помилка при валідації, перевірте email або password", errors.array())
       }
       const {email, password} = req.body   
-      const userData = await userService.login(email, password)
-      res.cookie( 'refreshToken',userData.refreshToken,{maxAge: 30*24*60*1000, httpOnly: true})
+      const userData = await userService.login(email, password)      
+      res.cookie( 'refreshToken', userData.tokens.refreshToken,{maxAge: 30*24*60*1000, httpOnly: true})
       return res.json(userData)
      }
      catch(e){
       return next(e)
      }
     }
-
-   async activate(req, res, next) {       
+  async activate(req, res, next) {       
       try{
         const {link} = req.params
         console.log('link', link)
         await userService.activateLink(link, next)
-       return res.redirect(process.env.CLIENT_URL)
+       return res.redirect(process.env.CLIENT_URL_LENDING)
       }
       catch(e){
         return next(ApiError.badRequest("Не вірна ссилка активации"))
       }
-  } 
-  
- 
+    }  
   async logout(req, res, next) {
       try{
-        const {refreshToken} = req.cookies 
-        console.log(refreshToken, 'refreshToken')      
+        const {refreshToken} = req.cookies          
         await userService.logout(refreshToken)
         res.clearCookie('refreshToken') 
         return res.json(200)
@@ -72,10 +61,8 @@ class UserController {
       catch(e){
         return next(ApiError.badRequest("LogOut no good", e))
       }
-  }
-  async check(req, res, next){
-    console.log('server check', req.user.userId)
-    console.log('server check', req.cookies.refreshToken)
+    }
+  async check(req, res, next){   
       try{
          const token = await tokenService.saveToken(req.user.userId, req.cookies.refreshToken)  
          res.json(token)
@@ -83,8 +70,7 @@ class UserController {
       catch(e){
         return next(ApiError.badRequest("Сесія скінчилась, авторизуйтесь", e))
       }
-    }
-    
+    }  
   async getall(req, res, next) {
        try{
        
@@ -112,22 +98,7 @@ class UserController {
        catch(e){
          return next(ApiError.badRequest("Помилка при валидації всіх корестувачів", e))
        }
-    }
-
-     async refresh(req, res, next) {
-      try{
-        const {refreshToken} = req.cookies
-       
-        const  userData = await userService.refresh(refreshToken)
-      
-        // res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 1000, httpOnly})
-        console.log('userController userData: >', userData)
-        return res.json(userData)
-      }
-      catch(e){  
-        return next(ApiError.badRequest("Refresh Token not good"))
-      }
-  }
+    } 
   async delete(req, res, next) {
       try{
          const {id} = req.params   
@@ -140,7 +111,6 @@ class UserController {
         return next(ApiError.badRequest('Корестувачь не видален', e))
       }
     }
-
 }
 
 module.exports = new UserController()
