@@ -13,7 +13,8 @@ async create(name, price, brandId, categoryId, value, img){
        if(value){
         value = JSON.parse(value)       
         // Данни приходят в виде строки поєтому єтот масив парсим
-        // на фронте в строке а на беки в масив об'єкти           
+        // на фронте в строке а на беки в масив об'єкти  
+        console.log('value',value)         
             value.forEach(prop => {
                  ProductProp.create({
                     title: prop.title,

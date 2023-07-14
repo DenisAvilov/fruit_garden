@@ -1,6 +1,7 @@
+const path = require('path');
 const mailService = require('./mail-service')
 const tokenService = require('./token-service')
-const {User} = require('../models/models')
+const {User, UserFio, Contact, Social} = require('../models/models')
 const uuid = require('uuid')
 const bcrypt = require('bcrypt')
 const ApiError = require('../error/ApiError')
@@ -24,9 +25,21 @@ class UserService{
         password: hasCandidate, 
         activationLink
       })
+
+       UserFio.create(
+          {name: '', lastName: '', img: '', userId: user.id},        
+        );
+       Contact.create(
+          {phone: null, userId: user.id},        
+        );
+       Social.create(
+          {fb: null, instagram: null, telegram: null, userId: user.id},        
+        );
+
       // await mailService.sendActivationMail(email, `${process.env.API_URL}/api/user/activate/${activationLink}`)
      
       const userDto = new UserDto(user)// userId, email, activationLink, role
+
       //Создаем карзину для пользователя
       // const basket = await Basket.create({userId: user.id})      
       const tokens = tokenService.generateTokens({...userDto})//разворачиваем новій новій обїект с помощью оператора спред
@@ -72,19 +85,79 @@ class UserService{
        await user.destroy({where:{id}}) 
        await tokenService.removeToken(refreshToken)       
        return user
-  }
-  
-  async getall(limit, offset){
-   
+  }  
+  async getall(limit, offset){   
     const users = await User.findAndCountAll({ limit, offset})    
     return users
   }  
-  async getUser(id){
-    console.log('get user id' + id)
-    const users = User.findOne({where:{id}})
-    console.log(users)
+  async getUser(id){    
+    const users = User.findOne({where:{id}})    
     return users
   } 
+  // First Middle Last &&  FIO
+  async fmlUp(name, lastName, img, id){   
+  let fileName;
+  if (img) {
+    fileName = uuid.v4() + ".jpeg";
+   await img.img.mv(path.resolve(__dirname, '..', 'static/users',  fileName));
+  }
 
+  const updateData = { name, lastName };
+  if (fileName) {
+    updateData.img = fileName;
+  }
+
+  const updatedUser = await UserFio.update(
+    updateData,
+    { where: { userId: id } }
+  );
+  return updatedUser;
+  } 
+
+  async fmlAll(limit, offset){
+    const usersFml = await UserFio.findAndCountAll({limit, offset})
+    return usersFml
+  }
+
+  async fml(id){
+    const userFml = await UserFio.findOne({where: {id}})
+    return userFml
+  }
+ // Contact Phone
+  async contactUp(phone, id){     
+  const updatedUser = await Contact.update(
+    phone,
+    { where: { userId: id } }
+  );
+  return updatedUser;
+  } 
+
+  async contactAll(limit, offset){
+    const usersFml = await Contact.findAndCountAll({limit, offset})
+    return usersFml
+  }
+
+  async contact(id){
+    const userFml = await Contact.findOne({where: {id}})
+    return userFml
+  }
+  // Social 
+  async socialUp(fb, instagram, telegram, id){   
+  const updatedSocial = await Social.update(
+    {fb, instagram, telegram},
+    { where: { userId: id } }
+  );
+  return updatedSocial;
+  } 
+
+  async socialAll(limit, offset){
+    const socialAll = await Social.findAndCountAll({limit, offset})
+    return socialAll
+  }
+
+  async social(id){
+    const userFml = await Social.findOne({where: {id}})
+    return userFml
+  }
 }
 module.exports = new UserService()

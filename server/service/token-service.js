@@ -27,14 +27,11 @@ class TokenService{
   }
 
    validateAccessToken(token){
-    try{    
-      const userData = jwt.verify(token, process.env.JWT_ACCESS_TOKEN)   
-      if(!userData){      
-        return ApiError.UnauthorizedError({massage: 'validateAccessToken ne proshol validacu'})
-      }     
+    try{   
+      const userData = jwt.verify(token, process.env.JWT_ACCESS_TOKEN)         
       return userData
     }
-    catch(e){     
+    catch(e){         
       return null
     }
   }

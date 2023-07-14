@@ -4,12 +4,32 @@ const {DataTypes, INTEGER} = require('sequelize')
 const User = sequelize.define('user',{
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   email: {type: DataTypes.STRING, unique: true},
-  password: {type: DataTypes.STRING, unique: true},
-  tel: {type: DataTypes.INTEGER, unique: true},
+  password: {type: DataTypes.STRING, unique: true},  
   role: {type: DataTypes.STRING, defaultValue: "USER"},
   isActivated: {type: DataTypes.BOOLEAN, defaultValue: false},
   activationLink: {type: DataTypes.STRING},
 })
+
+const Contact = sequelize.define('contact', {
+    // id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    phone: {type: DataTypes.INTEGER, unique: true, allowNull: true},              
+    isActivated: {type: DataTypes.BOOLEAN, defaultValue: false},
+    activationLink: {type: DataTypes.STRING},
+    userId: { type: DataTypes.INTEGER, allowNull: false }
+  })
+User.hasOne(Contact); // У одного пользователя может бить Contact
+Contact.belongsTo(User); // Сообщаем что Contact принадлежит пользователю
+
+const Social = sequelize.define('social', {
+    // id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    fb: {type: DataTypes.STRING, unique: true, allowNull: true},           
+    instagram: {type: DataTypes.STRING, unique: true, allowNull: true},
+    telegram: {type: DataTypes.STRING, unique: true, allowNull: true},
+    userId: { type: DataTypes.INTEGER, allowNull: false }
+})  
+User.hasOne(Social);  // У одного пользователя могут бить Social
+Social.belongsTo(User);  // Сообщаем что Social принадлежат 1 пользователю
+
 
 const Token = sequelize.define('token',{
   refreshToken: {type: DataTypes.STRING(1000), require: true}
@@ -21,8 +41,7 @@ const Basket = sequelize.define('basket',{
 })
 
 const BasketProduct = sequelize.define('basket_product',{
-  id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-  
+  id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},  
   // user_id: {type: DataTypes.STRING, unique: true}  
 })
 const Product = sequelize.define('product',{
@@ -41,6 +60,10 @@ const Brand = sequelize.define('brand',{
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   name: {type: DataTypes.STRING, unique: true, allowNull: true}  
 })
+const Smack = sequelize.define('smack',{
+  id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+  name: {type: DataTypes.STRING, unique: true, allowNull: true}  
+})
 const Rating = sequelize.define('rating',{
   // id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   rate: {type: DataTypes.INTEGER, allowNull: false}  
@@ -56,6 +79,24 @@ const TypeBrand = sequelize.define('type_brand',{
    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
    name: {type: DataTypes.STRING, unique: true, allowNull: true} 
 })
+
+const TypeSmack = sequelize.define('type_smack',{
+   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+   name: {type: DataTypes.STRING, unique: true, allowNull: true} 
+})
+
+const UserFio = sequelize.define('user_fio',{
+  //  id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+   name: {type: DataTypes.STRING,  allowNull: true}, 
+   lastName: {type: DataTypes.STRING, allowNull: true},  
+   img: {type: DataTypes.STRING, allowNull: false}, 
+   userId: { type: DataTypes.INTEGER, allowNull: false }  
+})
+
+User.hasOne(UserFio); // У одного пользователя может бить ФИО
+UserFio.belongsTo(User); // Сообщаем что ФИО принадлежит пользователю
+
+
 
 User.hasOne(Basket); // У одного пользователя может бить одна корзина
 Basket.belongsTo(User); // Сообщаем что корзина принадлежит пользователю
@@ -77,6 +118,9 @@ Product.belongsTo(Category);
 // может принадлежать только одному бренду
 Brand.hasMany(Product);
 Product.belongsTo(Brand);
+
+Smack.hasMany(Product)
+Product.belongsTo(Smack)
 //-----
 // связь many-to-many товаров и пользователей через промежуточную таблицу rating;
 // за один товар могут проголосовать несколько зарегистрированных пользователей,
@@ -104,6 +148,10 @@ Rating.belongsTo(Product);
 Category.belongsToMany(Brand,{through: TypeBrand})
 Brand.belongsToMany(Category, {through: TypeBrand})
 
+Category.belongsToMany(Smack,{through: TypeSmack})
+Smack.belongsToMany(Category, {through: TypeSmack})
+
+
 module.exports = {
   User,
   Token,
@@ -114,7 +162,11 @@ module.exports = {
   Brand, 
   TypeBrand, 
   Rating,
-  ProductProp
+  ProductProp,
+  Smack,
+  UserFio,
+  Contact,
+  Social
 } 
 
 // unique: true // уникальность

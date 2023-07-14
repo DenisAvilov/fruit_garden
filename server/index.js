@@ -19,7 +19,7 @@ app.use('/api', router)
 app.use(errorHandler)
 const start = async () => {
     try {      
-         
+        //  await sequelize.drop() 
          await sequelize.authenticate()     
          await sequelize.sync() //Сверяет состояние бд со схемой данних в модульс
         app.listen(PORT, () => console.log(`starting app on port ${PORT}`))

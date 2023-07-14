@@ -5,24 +5,34 @@ const authMiddleware = require('../middleware/authMiddleware')
 const roleMiddleware = require('../middleware/roleMiddleware')
 const {body} = require('express-validator')
 
-router.post('/signup',
+router.post('/sign-up',
        body('email').isEmail(),
        body('password').isLength({min:3, max:32}),
        userController.registration
        )
-router.post('/signin',
+router.post('/sign-in',
        body('email').isEmail(),
        body('password').isLength({min:3, max:32}),
        userController.login
        ) 
 router.get('/activate/:link',  userController.activate)
 router.get('/check',authMiddleware, userController.check)
-router.delete('/delete/:id([0-9]+)',authMiddleware, userController.delete)
+router.delete('/delete/:id([0-9]+)', roleMiddleware('ADMIN'), userController.delete)
 router.post('/logout', userController.logout)
 
 
 router.get('/getall', roleMiddleware('ADMIN'), userController.getall)
-router.get('/getuser/:id([0-9]+)',authMiddleware, userController.getUser)
-router.put('/update/:id([0-9]+)', authMiddleware, (req, res) => res.status(200).send('Обновление пользователя'))
-
+router.get('/get-user/:id([0-9]+)', authMiddleware, userController.getUser)
+// First Middle Last
+router.put('/fml-up/:id([0-9]+)', authMiddleware, userController.fmlUp)
+router.get('/fml-all', roleMiddleware('ADMIN'), userController.fmlAll)
+router.get('/fml/:id([0-9]+)', authMiddleware, userController.fml)
+// Contact
+router.put('/contact-up/:id([0-9]+)', authMiddleware, userController.contactUp)
+router.get('/contact-all', roleMiddleware('ADMIN'), userController.contactAll)
+router.get('/contact/:id([0-9]+)', authMiddleware, userController.contact)
+// Social
+router.put('/social-up/:id([0-9]+)', authMiddleware, userController.socialUp)
+router.get('/social-all', roleMiddleware('ADMIN'), userController.socialAll)
+router.get('/social/:id([0-9]+)', authMiddleware, userController.social)
 module.exports = router

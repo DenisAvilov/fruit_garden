@@ -20,7 +20,8 @@ class ProductController{
   async  getALLProduct(req, res){
    try{     
      let {brand_id, category_id, limit, page} = req.query
-      const product = await productService.getall(brand_id, category_id, limit, page)    
+      const product = await productService.getall(brand_id, category_id, limit, page)
+      console.log('product server', product)    
      return res.json(product)
    }
    catch(e){
