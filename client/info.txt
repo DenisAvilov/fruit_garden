@@ -1,0 +1,53 @@
+div castomnui
+https://mui.com/system/styled/
+
+
+слайдер центральній слайд по середине а крайние с двух сторон его обертают
+https://codesandbox.io/s/react-vertical-carousel-5z9rf?file=/src/VerticalCarousel.js
+
+
+
+https://alvarotrigo.com/blog/react-carousels/
+
+
+Реализация плавной прокрутки
+digitalocean.com/community/tutorials/how-to-implement-smooth-scrolling-in-react-ru
+
+
+
+server/
+
+client 
+    ├── pages/
+    │   ├── index.js
+    │   └── ...
+    ├── public/
+    │   ├── favicon.ico
+    │   └── ...
+    ├── src/
+    │   ├── components/
+    │   │   └── ...
+    │   ├── pages/
+    │   │   ├── api/
+    │   │   │    └──user/
+    │   │   │       └──signin.ts
+    │   │   │  
+    │   │   ├── app/
+    │   │   │      └──singin.tsx
+    │   │   │
+    │   │   │
+    │   │   ├── _app.tsx
+    │   │   │
+    │   │   ├── _document.tsx
+    │   │   └── ...
+    │   ├── store/
+    │   │   ├── slice/ 
+    │   │   │      └──authSlice.ts
+    │   │   ├── index.ts
+    │   │   └── ...
+    │   ├── types/
+    │   │      └── user.ts
+    │   │         
+    │   └── ...
+    ├── package.json
+    └── ...

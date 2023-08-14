@@ -1,0 +1,33 @@
+.cardGridView {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+}
+
+.cardBody {   
+  transition: all 0.2s ease-out; 
+}
+.cardBody:hover {
+  box-shadow: 0 0 4em 0px rgba(0, 0, 0, 0.4);
+}
+.cardBody:active {
+  transform: scale(1.01) translateY(0.2rem);
+}
+
+.cost{
+  font-size: 2.5em;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  
+  font-weight: 200;
+  color: green;
+  
+}
+.costIcon{
+  font-size: 2em;
+  font-weight: 500;
+  color: green;
+  
+}

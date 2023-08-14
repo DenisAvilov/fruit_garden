@@ -1,0 +1,86 @@
+
+html, body{
+  /* scroll-behavior: smooth */
+ 
+  position: relative;
+}
+html::-webkit-scrollbar-track {
+  background-color: #cecece;
+  width: 10px;
+  height: 5px;
+  cursor: grab;
+}
+
+/* Style for the scrollbar thumb*/
+html::-webkit-scrollbar-thumb {
+  background-color: #fbfcfa;
+  width: 10px;
+  height: 5px;
+  cursor: grab;
+}
+
+/* Style for the scrollbar corner */
+html::-webkit-scrollbar-corner {
+  background-color: #cecece;
+  width: 10px;
+  height: 5px;
+  cursor: grab;
+} 
+
+/* Style for the scrollbar */
+html::-webkit-scrollbar {
+  width: 10px;
+  height: 5px;
+  background-color: #cecece;
+  
+}  
+/* html::-webkit-scrollbar:hover, html::-webkit-scrollbar-corner:hover, html::-webkit-scrollbar-thumb:hover, html::-webkit-scrollbar-track:hover{
+cursor: grab; 
+} */
+
+
+/* CSS HEX
+--cadet-gray: #749299ff;
+--misty-rose: #f4e1e1ff;
+--ash-gray: #c4c5baff;
+--cadet-gray-2: #83a6b1ff;
+--dim-gray: #747478ff;
+
+/* CSS HSL */
+/* --cadet-gray: hsla(191, 15%, 53%, 1);
+--misty-rose: hsla(0, 46%, 92%, 1);
+--ash-gray: hsla(65, 9%, 75%, 1);
+--cadet-gray-2: hsla(194, 23%, 60%, 1);
+--dim-gray: hsla(240, 2%, 46%, 1); */ 
+
+/* SCSS HEX */
+/* $cadet-gray: #749299ff;
+$misty-rose: #f4e1e1ff;
+$ash-gray: #c4c5baff;
+$cadet-gray-2: #83a6b1ff;
+$dim-gray: #747478ff; */
+
+/* SCSS HSL */
+/* $cadet-gray: hsla(191, 15%, 53%, 1);
+$misty-rose: hsla(0, 46%, 92%, 1);
+$ash-gray: hsla(65, 9%, 75%, 1);
+$cadet-gray-2: hsla(194, 23%, 60%, 1);
+$dim-gray: hsla(240, 2%, 46%, 1); */
+
+/* SCSS RGB */
+/* $cadet-gray: rgba(116, 146, 153, 1);
+$misty-rose: rgba(244, 225, 225, 1);
+$ash-gray: rgba(196, 197, 186, 1);
+$cadet-gray-2: rgba(131, 166, 177, 1);
+$dim-gray: rgba(116, 116, 120, 1); */
+
+/* SCSS Gradient */
+/* $gradient-top: linear-gradient(0deg, #749299ff, #f4e1e1ff, #c4c5baff, #83a6b1ff, #747478ff);
+$gradient-right: linear-gradient(90deg, #749299ff, #f4e1e1ff, #c4c5baff, #83a6b1ff, #747478ff);
+$gradient-bottom: linear-gradient(180deg, #749299ff, #f4e1e1ff, #c4c5baff, #83a6b1ff, #747478ff);
+$gradient-left: linear-gradient(270deg, #749299ff, #f4e1e1ff, #c4c5baff, #83a6b1ff, #747478ff);
+$gradient-top-right: linear-gradient(45deg, #749299ff, #f4e1e1ff, #c4c5baff, #83a6b1ff, #747478ff);
+$gradient-bottom-right: linear-gradient(135deg, #749299ff, #f4e1e1ff, #c4c5baff, #83a6b1ff, #747478ff);
+$gradient-top-left: linear-gradient(225deg, #749299ff, #f4e1e1ff, #c4c5baff, #83a6b1ff, #747478ff);
+$gradient-bottom-left: linear-gradient(315deg, #749299ff, #f4e1e1ff, #c4c5baff, #83a6b1ff, #747478ff);
+$gradient-radial: radial-gradient(#749299ff, #f4e1e1ff, #c4c5baff, #83a6b1ff, #747478ff); */

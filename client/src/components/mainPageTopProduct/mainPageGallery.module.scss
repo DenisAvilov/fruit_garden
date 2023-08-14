@@ -1,0 +1,40 @@
+.iconButton{
+  top: 17vh;
+  right: -16px;
+  z-index: 2;
+  position: absolute; 
+}
+.active {  
+    display: none;
+    transition: display 0.3s ease-in-out;
+}
+.wrapSlider {
+  position: fixed;
+  top: 0;
+  right: 118px;
+  bottom: 0;
+  width: 0;  
+  background-color: #f4f4f4;
+  transition: background-color 0.3s ease-in-out; 
+  transition: width 0.3s ease-in-out; 
+  box-sizing: border-box;
+  overflow: hidden;
+  
+  
+}
+
+.open { 
+  right: 118px;
+  width: 250px;  
+  display: block;  
+  z-index: 3; 
+}
+
+.sliderContainer {
+   overflow: hidden;
+ }
+
+.sliderContainer:hover {
+  pointer-events: auto; 
+}
+

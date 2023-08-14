@@ -1,0 +1,44 @@
+import AppMenu from '@/components/appMenu'
+import CustomizedBreadcrumbs from '@/components/navigation/breadcrumbs'
+import { Product, selectProduct } from '@/store/slice/productSlice'
+import { Container } from '@mui/material'
+import { useRouter } from 'next/router'
+import { useSelector } from 'react-redux'
+
+interface ProductPageProps {
+	hasPage: boolean
+}
+
+export default function ProductPage() {
+	const router = useRouter()
+	const { slug } = router.query as { slug: string[] }
+
+	const products = useSelector(selectProduct)
+	const id = slug !== undefined ? +slug[1] : undefined
+	const product =
+		id !== undefined ? products.find((obj) => obj.id === id) : undefined
+
+	if (id !== undefined && product === undefined) {
+		return <h1>Страница не найдена</h1>
+	}
+
+	return (
+		<>
+			{product !== undefined && (
+				<Container
+					maxWidth='lg'
+					sx={{
+						position: 'relative',
+						zIndex: 2,
+						paddingBottom: '40px',
+					}}
+				>
+					<AppMenu sx={{ position: 'relative' }} />
+					<CustomizedBreadcrumbs></CustomizedBreadcrumbs>
+					<h1>Product: {product.name}</h1>
+					<p>Parameter: {product.description}</p>
+				</Container>
+			)}
+		</>
+	)
+}
