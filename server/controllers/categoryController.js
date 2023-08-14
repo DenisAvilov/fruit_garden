@@ -8,7 +8,7 @@ class TypeController {
       return res.json(category)
     }
     catch(e){
-      return next(ApiError.badRequest("Категория товару не добавлена"))
+      return next(ApiError.badRequest("Категория товару не добавлена"), e)
     }
   } 
   async getCategoryController(req,res, next){

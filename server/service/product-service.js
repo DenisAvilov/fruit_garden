@@ -1,22 +1,41 @@
-const {Product, ProductProp} = require('../models/models')
+const {Product, ProductInfo, ProductSmack, ProductBrand, Smack, Brand, Category} = require('../models/models')
 const uuid = require('uuid') // Генератор случайніх АЙДИШНИКОВ які не будуть повторюватись
 const path = require('path')
 const limitPage = require('../controllers/helpers/helpers')
 const ApiError = require('../error/ApiError')
 class ProductService{
   
-async create(name, price, brandId, categoryId, value, img){
+async create(name, price, brandId, categoryId, smackId , value, img){
   let fileName = uuid.v4() + ".jpeg"     
+
       // генерируем айдишник и какатенируем с разширением
-       const product = await Product.create({name, price, brandId, categoryId, img: fileName}) 
-       img.mv(path.resolve(__dirname, '..', 'static',  fileName))// переместили созданый файл в папку с файлом        
+       const product = await Product.create({name, price, brandId, categoryId,  img: fileName}) 
+      
+       img.mv(path.resolve(__dirname, '..', 'static',  fileName))// переместили созданый файл в папку с файлом    
+      
+      if (brandId){
+        await product.addBrand(brandId)
+      } 
+
+          // Перевірка наявності ідентифікаторів у вигляді рядка
+      if (typeof smackId === 'string') {
+        smackId = smackId.split(',').map(id => parseInt(id, 10));
+      }
+      
+      console.log('Должен быть масив smackId', smackId);
+      
+      // Зв'язуємо Smack з Product
+      if (Array.isArray(smackId) && smackId.length > 0) {
+        await product.addSmack(smackId);
+      }
+
        if(value){
         value = JSON.parse(value)       
         // Данни приходят в виде строки поєтому єтот масив парсим
         // на фронте в строке а на беки в масив об'єкти  
         console.log('value',value)         
             value.forEach(prop => {
-                 ProductProp.create({
+                 ProductInfo.create({
                     title: prop.title,
                     value: prop.description,
                     productId: product.id                    
@@ -25,29 +44,52 @@ async create(name, price, brandId, categoryId, value, img){
         }
         return product
 }
-async getall(brand_id, category_id, limits, page){  
-    let {limit, offset} = await limitPage.limitPage(limits, page)   
-     let product;
-     if(!brand_id && !category_id){
-      //findAndCountAll для пагинации
-       product = await Product.findAndCountAll({limit, offset})
-     } 
-     if(brand_id && !category_id){
-       product = await Product.findAndCountAll({where:{brand_id}, limit, offset})
-     }  
-     if(!brand_id && category_id){
-       product = await Product.findAndCountAll({where:{category_id}, limit, offset})
-     } 
-     if(brand_id && category_id){
-      product = await Product.findAndCountAll({where:{brand_id,category_id}, limit, offset})
-     } 
-  return product
+
+async getall(brand_id, category_id, smack_id, limits, page) {  
+    const brandIds = brand_id ? brand_id.split(',') : [];
+    const categoryIds = category_id ? category_id.split(',') : [];
+    const smackIds = smack_id ? smack_id.split(',') : [];
+  let { limit, offset } = await limitPage.limitPage(limits, page);  
+
+  let includeOptions = []; 
+  
+  if (brandIds.length > 0) {
+    includeOptions.push({
+      model: Brand,
+      where: { id: brandIds },
+      through: { attributes: [] },
+    });
+    }
+
+   if (categoryIds.length > 0) {
+    includeOptions.push({
+      model: Category,
+      where: { id: categoryIds },
+      through: { attributes: [] },
+    });
+    }
+
+    if (smackIds.length > 0) {
+    includeOptions.push({
+      model: Smack,
+      where: { id: smackIds },
+      through: { attributes: [] },
+    });
+    }
+
+    const queryOptions = includeOptions.length === 0 ? { limit, offset } : { limit, offset, include: includeOptions };
+
+    const products = await Product.findAndCountAll(queryOptions);
+
+    return products;
 }
+
+
 async getProduct(id){
   const product = await Product.findOne(
       {
         where:{id},
-        include: [{model: ProductProp, as: 'value'}]
+        include: [{model: ProductInfo, as: 'value'}]
       }) 
       return product
 }
@@ -60,7 +102,7 @@ async update(id,body ,img){
           const categoryId = body.categoryId ?? product.categoryId
    if(!img){
             fileName = product.img
-            // console.log('Файл Остался Без Змін', fileName);
+            
           }
           else{ 
             const pathImg = product.img            
@@ -69,7 +111,7 @@ async update(id,body ,img){
             let fs = require('fs');
             fs.unlink(path.resolve(__dirname, '..','static',pathImg) , err => {
             if(err) throw err;
-            // console.log('Файл успешно удалён', pathImg);
+            
           });
             
           } 

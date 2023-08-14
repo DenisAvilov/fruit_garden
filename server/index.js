@@ -21,7 +21,11 @@ const start = async () => {
     try {      
         //  await sequelize.drop() 
          await sequelize.authenticate()     
-         await sequelize.sync() //Сверяет состояние бд со схемой данних в модульс
+         await sequelize.sync({ alter: true }) 
+        //  await sequelize.sync() 
+         //Сверяет состояние бд со схемой данних в модульс { force: true }
+         //Синхронизирует существующюю таблицу { alter: true }
+         
         app.listen(PORT, () => console.log(`starting app on port ${PORT}`))
     } catch (e) {
         console.log('error => ', e)

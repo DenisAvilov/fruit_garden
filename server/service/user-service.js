@@ -6,7 +6,7 @@ const uuid = require('uuid')
 const bcrypt = require('bcrypt')
 const ApiError = require('../error/ApiError')
 const UserDto = require('../dtos/userDto')
-const limitPage = require('../controllers/helpers/helpers')
+
 
 class UserService{
   async registration(email, password, role){    
@@ -124,9 +124,9 @@ class UserService{
     return userFml
   }
  // Contact Phone
-  async contactUp(phone, id){     
+  async contactUp(phone, id){      
   const updatedUser = await Contact.update(
-    phone,
+    {phone: phone},
     { where: { userId: id } }
   );
   return updatedUser;

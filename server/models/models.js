@@ -4,36 +4,40 @@ const {DataTypes, INTEGER} = require('sequelize')
 const User = sequelize.define('user',{
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   email: {type: DataTypes.STRING, unique: true},
-  password: {type: DataTypes.STRING, unique: true},  
-  role: {type: DataTypes.STRING, defaultValue: "USER"},
+  password: {type: DataTypes.STRING},  
+  role: {type: DataTypes.STRING, defaultValue: "ADMIN"},
   isActivated: {type: DataTypes.BOOLEAN, defaultValue: false},
   activationLink: {type: DataTypes.STRING},
 })
+ 
+
+const UserFio = sequelize.define('user_fio',{
+   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+   name: {type: DataTypes.STRING,  allowNull: true}, 
+   lastName: {type: DataTypes.STRING, allowNull: true},  
+   img: {type: DataTypes.STRING, allowNull: false}, 
+   userId: { type: DataTypes.INTEGER, allowNull: false }  
+})
+
 
 const Contact = sequelize.define('contact', {
-    // id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     phone: {type: DataTypes.INTEGER, unique: true, allowNull: true},              
     isActivated: {type: DataTypes.BOOLEAN, defaultValue: false},
     activationLink: {type: DataTypes.STRING},
     userId: { type: DataTypes.INTEGER, allowNull: false }
   })
-User.hasOne(Contact); // У одного пользователя может бить Contact
-Contact.belongsTo(User); // Сообщаем что Contact принадлежит пользователю
 
-const Social = sequelize.define('social', {
-    // id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+  const Social = sequelize.define('social', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     fb: {type: DataTypes.STRING, unique: true, allowNull: true},           
     instagram: {type: DataTypes.STRING, unique: true, allowNull: true},
     telegram: {type: DataTypes.STRING, unique: true, allowNull: true},
     userId: { type: DataTypes.INTEGER, allowNull: false }
 })  
-User.hasOne(Social);  // У одного пользователя могут бить Social
-Social.belongsTo(User);  // Сообщаем что Social принадлежат 1 пользователю
 
 
-const Token = sequelize.define('token',{
-  refreshToken: {type: DataTypes.STRING(1000), require: true}
-})
+// Карзина начало
 
 const Basket = sequelize.define('basket',{
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
@@ -42,16 +46,27 @@ const Basket = sequelize.define('basket',{
 
 const BasketProduct = sequelize.define('basket_product',{
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},  
-  // user_id: {type: DataTypes.STRING, unique: true}  
 })
+
+// Карзина конец
+// Товар начало
+
 const Product = sequelize.define('product',{
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   name: {type: DataTypes.STRING,  unique: true, allowNull: true},
-  price: {type: DataTypes.STRING, allowNull: true},
+  price: {type: DataTypes.STRING, allowNull: false},
   rating: {type: DataTypes.INTEGER, defaultValue: 0},
   img: {type: DataTypes.STRING, allowNull: false}  
 })
+// свойства товара, у одного товара может быть много свойств
+const ProductInfo = sequelize.define('product_info',{
+  id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+  title: {type: DataTypes.STRING, allowNull: false},  
+  value: {type: DataTypes.STRING, allowNull: false}  
+})
 
+
+//type 
 const Category = sequelize.define('category',{
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   name: {type: DataTypes.STRING, unique: true, allowNull: true}  
@@ -60,43 +75,48 @@ const Brand = sequelize.define('brand',{
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   name: {type: DataTypes.STRING, unique: true, allowNull: true}  
 })
-const Smack = sequelize.define('smack',{
+
+const Smack = sequelize.define('smack', {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  name: { type: DataTypes.STRING, allowNull: false, unique: true },
+});
+
+// Рейтинг начало
+  const Rating = sequelize.define('rating',{
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-  name: {type: DataTypes.STRING, unique: true, allowNull: true}  
-})
-const Rating = sequelize.define('rating',{
-  // id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   rate: {type: DataTypes.INTEGER, allowNull: false}  
 })
-// свойства товара, у одного товара может быть много свойств
-const ProductProp = sequelize.define('product_prop',{
-  id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-  title: {type: DataTypes.STRING, allowNull: false},  
-  value: {type: DataTypes.STRING, allowNull: false}  
+// Рейтинг конец
+
+//Токен 
+const Token = sequelize.define('token',{
+  refreshToken: {type: DataTypes.STRING(1000), require: true}
 })
+
+
 // Инициализирующяя таблица для связей многие для многих 
-const TypeBrand = sequelize.define('type_brand',{
-   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-   name: {type: DataTypes.STRING, unique: true, allowNull: true} 
-})
+// Внешние ключи SECvialys добавит сам 
+// const TypeBrand = sequelize.define('type_brand',{
+//    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+//   //  name: {type: DataTypes.STRING, unique: true, allowNull: true} 
+// })
 
-const TypeSmack = sequelize.define('type_smack',{
-   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-   name: {type: DataTypes.STRING, unique: true, allowNull: true} 
-})
 
-const UserFio = sequelize.define('user_fio',{
-  //  id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-   name: {type: DataTypes.STRING,  allowNull: true}, 
-   lastName: {type: DataTypes.STRING, allowNull: true},  
-   img: {type: DataTypes.STRING, allowNull: false}, 
-   userId: { type: DataTypes.INTEGER, allowNull: false }  
-})
+
+
+
+////////////////////////////////////////////////////
+
+
+// Описание моделей  юзер
+User.hasOne(Contact); // У одного пользователя может бить Contact
+Contact.belongsTo(User); // Сообщаем что Contact принадлежит пользователю
+
+User.hasOne(Social);  // У одного пользователя могут бить Social
+Social.belongsTo(User);  // Сообщаем что Social принадлежат 1 пользователю
 
 User.hasOne(UserFio); // У одного пользователя может бить ФИО
 UserFio.belongsTo(User); // Сообщаем что ФИО принадлежит пользователю
-
-
 
 User.hasOne(Basket); // У одного пользователя может бить одна корзина
 Basket.belongsTo(User); // Сообщаем что корзина принадлежит пользователю
@@ -112,16 +132,28 @@ BasketProduct.belongsTo(Product); //
 
 // связь категории с товарами: в категории может быть несколько товаров, но
 // каждый товар может принадлежать только одной категории
-Category.hasMany(Product, {onDelete: 'RESTRICT'});
+Category.hasMany(Product);
 Product.belongsTo(Category);
-// связь бренда с товарами: у бренда может быть много товаров, но каждый товар
-// может принадлежать только одному бренду
-Brand.hasMany(Product);
-Product.belongsTo(Brand);
 
-Smack.hasMany(Product)
-Product.belongsTo(Smack)
-//-----
+
+// Отношение "многие ко многим" (один продукт может быть у множества брендов)
+const ProductBrand = sequelize.define('product_brand', {}); // Вспомогательная таблица
+
+
+Brand.belongsToMany(Product, { through: ProductBrand, foreignKey: 'brandId' });
+Product.belongsToMany(Brand, { through: ProductBrand, foreignKey: 'productId' });
+
+
+const ProductSmack = sequelize.define('product_smack', {}); // Вспомогательная таблица
+
+
+Product.belongsToMany(Smack, { through: ProductSmack, foreignKey: 'productId' });
+Smack.belongsToMany(Product, { through: ProductSmack, foreignKey: 'smackId' });
+
+
+
+User.hasMany(Rating);
+Rating.belongsTo(User); 
 // связь many-to-many товаров и пользователей через промежуточную таблицу rating;
 // за один товар могут проголосовать несколько зарегистрированных пользователей,
 // один пользователь может проголосовать за несколько товаров
@@ -130,39 +162,19 @@ User.belongsToMany(Product, {through: Rating, onDelete: 'CASCADE'})
 // super many-to-many https://sequelize.org/master/manual/advanced-many-to-many.html
 // это обеспечит возможность любых include при запросах findAll, findOne, findByPk
 //-----
-//Продукт Имеет связь один ко многим
-Product.hasMany(ProductProp, {as:'value'})
-ProductProp.belongsTo(Product)
-
-User.hasMany(Rating);
-Rating.belongsTo(User); 
-
-Product.hasMany(Rating);
-Rating.belongsTo(Product);
-
-// связь товара с его свойствами: у товара может быть несколько свойств, но
-// каждое свойство связано только с одним товаром
-// Product.hasMany(ProductProp,{as:'props', onDelete: 'CASCADE'});// указіваем как будит називаться поле характеристик. принимаем через строку запроса query
-// ProductProp.belongsTo(Product);
-
-Category.belongsToMany(Brand,{through: TypeBrand})
-Brand.belongsToMany(Category, {through: TypeBrand})
-
-Category.belongsToMany(Smack,{through: TypeSmack})
-Smack.belongsToMany(Category, {through: TypeSmack})
-
 
 module.exports = {
   User,
   Token,
   Basket,
   BasketProduct,
+  ProductSmack,
+  ProductBrand,
   Product,
   Category,
-  Brand, 
-  TypeBrand, 
+  Brand,  
   Rating,
-  ProductProp,
+  ProductInfo,
   Smack,
   UserFio,
   Contact,

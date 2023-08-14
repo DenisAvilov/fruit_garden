@@ -1,5 +1,6 @@
 const uuid = require('uuid') // Генератор случайніх АЙДИШНИКОВ які не будуть повторюватись
 const path = require('path')
+
 const {Product, ProductProp} = require('../models/models')
 const productService = require('../service/product-service')
 const ApiError = require('../error/ApiError')
@@ -7,9 +8,16 @@ const ApiError = require('../error/ApiError')
 class ProductController{
   async createProduct(req,res, next){
     try{ 
-       let {name, price, brandId, categoryId, value}  = req.body // Получаем из ранее созданих БрендАЙДИ и КАТЕРОГИАЙДИ
-       const {img} = req.files  
-       const product = await productService.create(name, price, brandId, categoryId, value, img)     
+       let {name, price, brandId, categoryId, smackId, value}  = req.body // Получаем из ранее созданих БрендАЙДИ и КАТЕРОГИАЙДИ
+       const {img} = req.files        
+        console.log('smackId>', name, price, brandId, categoryId, smackId, value)
+       
+        //  let arr = smackId.split(",")
+      
+        // console.log('smackId Array.isArray >', arr)
+
+       const product = await productService.create(name, price, brandId, categoryId, smackId, value, img)   
+      
        return res.json(product) 
     }
     catch(e){
@@ -17,15 +25,14 @@ class ProductController{
     }
   } 
    
-  async  getALLProduct(req, res){
+  async  getALLProduct(req, res, next){
    try{     
-     let {brand_id, category_id, limit, page} = req.query
-      const product = await productService.getall(brand_id, category_id, limit, page)
-      console.log('product server', product)    
-     return res.json(product)
+     let {brand_id, category_id, smack_id, limit, page} = req.query
+      const product = await productService.getall(brand_id, category_id, smack_id, limit, page)
+      return res.json(product)
    }
    catch(e){
-    return next( ApiError.badRequest(e.message + ' Продуктов не найдено'))
+    return next( ApiError.badRequest(e.message + ' Продуктов не найдено', e))
    }
     } 
 
