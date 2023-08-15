@@ -1,32 +1,35 @@
 import {$host, $authHost} from "../index"
-import { AuthType, UserResponseType } from '../../../types/user'
-import { AxiosError, AxiosResponse } from 'axios';
+import { AuthType } from '../../../types/user'
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useDispatch } from 'react-redux';
-import {  loginSuccess } from '@/store/slice/authSlice';
+import {  loginOut, loginSuccess } from '@/store/slice/authSlice';
 import { parseCookies } from 'nookies'
 // разпарсим токен
 import jwt_decode from "jwt-decode";
 import { AuthResponse } from "@/models/response/AuthResponse";
+import { iUser } from "@/models/response/iUser";
 
 
-export const  singUp =  async (email: string, password: string ): Promise<AxiosResponse<AuthResponse>> => {
+export const  singUp =  async (email: string, password: string ): Promise<iUser> => {
 
     try {
-      const {data} = await $host.post<AuthResponse>("api/user/signup", {email, password, role: "ADMIN"});   
-      localStorage.setItem('token', data.tokens.accessToken)   
-       return jwt_decode(data.tokens.accessToken)       
+      const {data} = await $host.post<AuthResponse>("/user/signup", {email, password, role: 'ADMIN'});   //ADMIN,USER
+      
+      localStorage.setItem('token', data.tokens.accessToken)  
+      return  data.user 
+
     } catch (error: any) {
   const errorMessage = error.response?.data?.message || 'Unknown error';
   return  errorMessage;
-}
+} 
   }
 
 
-export const  signIn =  async (values: AuthType): Promise<AxiosResponse<AuthResponse>> => {  
+export const  signIn =  async (values: AuthType): Promise<iUser> => {  
     try {
-      const {data} = await $host.post<AuthResponse>("api/user/signin", values);       
+      const {data} = await $host.post<AuthResponse>("/user/signin", values);       
       localStorage.setItem('token', data.tokens.accessToken)      
-      return jwt_decode(data.tokens.accessToken)       
+      return data.user      
     } catch (error: any) {
   const errorMessage = error.response?.data?.message || 'Unknown error';
   return  errorMessage;
@@ -34,24 +37,37 @@ export const  signIn =  async (values: AuthType): Promise<AxiosResponse<AuthResp
   }
 
 
-export const check =  async () => {
-    try {
-      const data = await $authHost.get("api/user/check");            
-      console.log('signin.in check data', data)
-      return data
-    } catch (error: any) {   
-      console.log('signin.in check error')
-      return error;     
-    }
-  }
+// export const check =  async () => {
+//     try {
+//       const data = await $authHost.get("/user/check");            
+//       console.log('signin.in check data', data)
+//       return data
+//     } catch (error: any) {   
+//       console.log('signin.in check error', error)
+//       return error;     
+//     }
+//   }
 
 
- export const  logOut = async(cookies: any) =>{
+//  export const authRefresh = async () => {  
+//   try{
+//     const user = await $host.get( "/refresh" ) 
+//     localStorage.setItem('token', user.data.tokens.accessToken)     
+//     return user.data.user
+     
+//   }
+//   catch(e){
+//     return console.log('eeee', e)
+//   }
+//  } 
+
+ export const  logOut = async() =>{
     try{    
-     const rez = await $host.post("api/user/logout", cookies)
-     return rez
+     const rez = await $host.post("/user/logout")
+      localStorage.removeItem('token')     
+     return rez.data
     }
-    catch(e){
+    catch(e: any ){
       return e
     }
   }
@@ -62,7 +78,7 @@ class AuthService{
   
   async login(email: string, password: string) {
     try {
-       $host.post<AuthType>("api/user/signin", {email,});
+       $host.post<AuthType>("/user/signin", {email,});
       
      
     } catch (error: any) {
@@ -75,10 +91,8 @@ class AuthService{
  
  async singUp(values:AuthType){
   try{
-   const response = await $host.post<AuthType>("api/user/signup",values)
+   const response = await $host.post<AuthType>("/user/signup",values)
    const data = response.data;
-
-   console.log(data) 
    return data
   }
   catch(error: any){
@@ -95,42 +109,16 @@ class AuthService{
       // Обработка других ошибок
       console.log('Error', error.message);
     }
-    console.log(error.config);
+    console.log(error);
   }
     
   } 
 
- async check(){
-  try{
-   const response = await $host.post<AuthType>("api/user/signup")
-   const data = response.data;
 
-   console.log(data) 
-   return data
-  }
-  catch(error: any){
-     if (error.response) {
-      // Обработка ошибки от сервера
-      console.log('test data', error.response.data);
-      console.log('me err',error.response.status);
-      console.log(error.response.headers);
-      return error
-    } else if (error.request) {
-      // Обработка ошибки, если запрос не был выполнен
-      console.log(error.request);
-    } else {
-      // Обработка других ошибок
-      console.log('Error', error.message);
-    }
-    console.log(error.config);
-  }
-    
-  } 
 
-  async logOut(cookies: any){
-    try{
-    
-     const rez = await $host.post("api/user/logout", cookies)
+  async logOut(){
+    try{    
+     const rez = await $host.post("/user/logout")
      return rez
     }
     catch(e){
@@ -139,6 +127,8 @@ class AuthService{
   }
   
 }
+
+
 // eslint-disable-next-line import/no-anonymous-default-export
 // export default new  Auth()
 

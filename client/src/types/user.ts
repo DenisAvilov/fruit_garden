@@ -3,11 +3,13 @@ export type AuthType = {
   password: string
 }
 
-export type UserResponseType = {
-  accessToken: string
-  refreshToken: string
+export interface UserResponseType{
+  tokens: {
+     accessToken: string
+     refreshToken: string
+  } ,
   user:{
-    activationLink: string
+    isActivated: boolean,   
     email: string
     role: string
     userId: number

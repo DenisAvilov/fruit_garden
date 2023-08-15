@@ -13,8 +13,7 @@ import * as yup from 'yup'
 import Link from 'next/link'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
-import {
-	loginRequest,
+import {	
 	loginSuccess,
 	loginFailure,
 	loginEnd,
@@ -82,21 +81,22 @@ const SignInSide: React.FC<Props> = (props: Props) => {
 		},
 		validationSchema: validationSchema,
 		onSubmit: async (values, { setErrors, resetForm }) => {
-			dispatch(loginRequest())
-			const click = async (value: AuthType) => {
+			
+			const click = async (value: { email: string; password: string }) => {
 				try {
 					if (!isLogin) {
-						const data = await singUp(value.email, value.password)
-						if (typeof data === 'string') {
-							return setErrors({ serverError: data })
+						const user = await singUp(value.email, value.password)
+
+						if (typeof user === 'string') {
+							return setErrors({ serverError: user })
 						}
-						dispatch(loginSuccess(data.data))
+						dispatch(loginSuccess(user))
 					} else {
-						const data = await signIn(value)
-						if (typeof data === 'string') {
-							return setErrors({ serverError: data })
+						const user = await signIn(value)
+						if (typeof user === 'string') {
+							return setErrors({ serverError: user })
 						}
-						dispatch(loginSuccess(data.data))
+						dispatch(loginSuccess(user))
 					}
 				} catch (e: any) {
 					console.log('e auth', e)
