@@ -1,7 +1,7 @@
 // нашa логикa авторизации.
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppDispatch, RootState } from '../index'
-import Auth from '../../pages/api/user/signin'
+
 
 type Info = {
 	description: string;
@@ -11,40 +11,48 @@ type Info = {
 }
 
 export type Product = {
-  id: number,
-  name: string,
-	img: FileList | undefined,
-  description: string,
-  category: string,
-  price: number,
-  smak: string,
-  rating?: number,
-  info: Info[],
-	// quantity: number
-	
-};
+    brandId: number
+    categoryId: number
+    id: number
+    img: string
+    name: string
+    price: string
+    rating: number
+}
+
+
+// export type Product = {
+//   id: number,
+//   name: string,
+// 	img: FileList | undefined,
+//   description: string,
+//   category: string,
+//   price: number,
+//   smak: string,
+//   rating?: number,
+//   info: Info[],
+// };
+
 export type Category = {
   id: number 
   name: string 
 };
-export type Smak ={
+export type Smak = {
 	id: number
 	name: string
  }
-type SelectCategoryResponse = {
-	selected: number
-}
 
-  type ProductResponse = {
-  product: Array<Product>
-  // category: Array<Category>
-	// smak: Array<Smak>
-}
+type Brand = {
+  id: number,
+  name: string
+} 
+
 
 export type PropsTypes = {
-  product: Array<Product>
+  product: Product[]
   category: Array<Category>
 	smak: Smak[]
+  brand: Brand[]
   loading: boolean;
   error: string | null;
   idCategory: number 
@@ -54,47 +62,26 @@ const initialState: PropsTypes = {
   product: [
 	{
 		id: 1,
-		img: undefined,
+		img: '',
 		name: 'Класичний зефір',
-		description:
-			"це ідеальний вибір для любителів традиційного зефіру. Цей зефір має м'яку та повітряну текстуру, а також солодкий смак, який точно сподобається всім.",
-		category: '',
-      price: 220,
-    smak: 'Полуниці',
-		info: 	[]
-	},
-	{
-		id: 2,
-		img: undefined,
-		name: 'Сливовий зефір',
-		description:
-			"це ідеальний вибір для любителів традиційного зефіру. Цей зефір має м'яку та повітряну текстуру, а також солодкий смак, який точно сподобається всім.",
-		category: '',
-      price: 120,
-    smak: 'Слива',
-		info: []		
-	},
-	{
-		id: 3,
-		img: undefined,
-		name: 'Зефір по Харьковськи',
-		description:
-			"це ідеальний вибір для любителів традиційного зефіру. Цей зефір має м'яку та повітряну текстуру, а також солодкий смак, який точно сподобається всім.",
-		category: '',
-      price: 130,
-    smak: 'Лимон',
-		info: []		
+    brandId: 0,
+    categoryId: 1,
+    price: '',
+    rating: 0,
+		// description:
+		// 	"це ідеальний вибір для любителів традиційного зефіру. Цей зефір має м'яку та повітряну текстуру, а також солодкий смак, який точно сподобається всім.",
+		// smak: 'Полуниці',
+		// info: 	[]
 	},
   ], 
   category: [
-    {id: 1, name: 'Зефір'},
-    {id: 2, name: 'Пастела'},
-    {id: 3, name: 'Снеки'},
+    {id: 1, name: 'Зефір'}, 
+  ],
+  brand: [
+    {id: 1, name: 'AVI-FAMILY'}
   ],
 	smak: [
-		{id: 1, name: 'Абрикос'},
-		{id: 2, name: 'Лемон'},
-		{id: 3, name: 'Какао'},
+		{id: 1, name: 'Абрикос'},		
 	],
   loading: false,
   error:  null,
@@ -110,6 +97,7 @@ const productSlice = createSlice({
       state.loading = true;
     },
     productSuccess: (state, action: PayloadAction<Product>) => {
+      console.log('action', action.payload)
       const newProduct = action.payload;
       state.product =  [...state.product,  newProduct ]    
     },

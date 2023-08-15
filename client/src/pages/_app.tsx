@@ -10,11 +10,18 @@ import theme from '../theme'
 import createEmotionCache from '../createEmotionCache'
 import SmoothScroll from '@/components/scrollToHide/smoothScroll'
 const globalStyles = require('../styles/globals.css')
-import { Provider, useDispatch } from 'react-redux'
+import { Provider, useDispatch, useSelector } from 'react-redux'
 import { createWrapper } from 'next-redux-wrapper'
+import ProductApi from './api/product/product'
 import { store } from '../store'
-import { loginSuccess } from '@/store/slice/authSlice'
-import { check } from './api/user/signin'
+import {
+	loginRequest,
+	loginSuccess,
+	selectLoading,
+} from '@/store/slice/authSlice'
+import { checkRefresh } from './api/index'
+import { productSuccess } from '@/store/slice/productSlice'
+
 const clientSideEmotionCache = createEmotionCache()
 
 interface MyAppProps extends AppProps {
@@ -26,21 +33,26 @@ const wrapper = createWrapper(() => store)
 function MyApp(props: MyAppProps) {
 	const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
 	const dispatch = useDispatch()
+	const loading = useSelector(selectLoading)
 
 	React.useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const data = await check()
-				// localStorage.setItem('token', data.token)
-				console.log('_app', data)
-				// dispatch(loginSuccess(data))
-			} catch (error) {
-				// Обработка ошибки проверки токена
+		const token = localStorage.getItem('token')
+		if (token) {
+			dispatch(loginRequest())
+			const fetchData = async () => {
+				try {
+					const data = await checkRefresh()
+					if (typeof data === 'object') {
+						dispatch(loginSuccess(data))
+					}
+				} catch (error) {
+					return error
+				}
 			}
+			fetchData()
 		}
-
-		fetchData()
 	}, [dispatch])
+
 	return (
 		<Provider store={store}>
 			<CacheProvider value={emotionCache}>

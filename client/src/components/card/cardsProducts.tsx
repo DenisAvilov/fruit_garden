@@ -6,27 +6,21 @@ import {
 	CardContent,
 	CardMedia,
 	Grid,
-	Icon,
-	Stack,
 	Typography,
 } from '@mui/material'
-import { experimentalStyled as styled } from '@mui/material/styles'
 import React from 'react'
-import Paper from '@mui/material/Paper'
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import style from './cardsProducts.module.scss'
-import { height } from '@mui/system'
 import theme from '@/theme'
 import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
-import { selectProduct } from '@/store/slice/productSlice'
+import { productSuccess, selectProduct } from '@/store/slice/productSlice'
 import { selectUserData } from '@/store/slice/authSlice'
 import basketClient from './../../pages/api/basket/basket'
+import { useDispatch } from 'react-redux'
+import ProductApi from './../../pages/api/product/product'
 
 function MediaCard(props: any) {
 	const { id, name, description, price, userID } = props
-
 
 	const router = useRouter()
 
@@ -34,19 +28,14 @@ function MediaCard(props: any) {
 		// router.push(`${router.route}/${id}`)
 		// router.push(`${router.route}/${id}`)
 		if (router.asPath === '/') {
-			
 			router.push(`/categories/${id}`)
 		}
 		if (router.asPath == '/lending') {
-			
 			router.push(`/categories/${id}`)
 		}
 		if (router.asPath == '/categories') {
-			
 			router.push(`/categories/${id}`)
 		}
-
-		
 	}
 
 	return (
@@ -136,13 +125,24 @@ function MediaCard(props: any) {
 	)
 }
 
-type Props = {
-	item: number
-}
-
 const CardCustom: React.FC = () => {
+	const dispatch = useDispatch()
+	// React.useEffect(() => {
+	// 	const products = async () => {
+	// 		try {
+	// 			const product = await ProductApi.productGetAll()
+	// 			console.log('product useEffect', product.data.rows)
+	// 			dispatch(productSuccess(product.data.rows))
+	// 		} catch (e) {
+	// 			console.log('await ProductApi.productGetAll( ) client', e)
+	// 			return e
+	// 		}
+	// 	}
+	// 	products()
+	// }, [dispatch])
+
 	const products = useSelector(selectProduct)
-	const userID = useSelector(selectUserData)
+	// const userID = useSelector(selectUserData)
 
 	return (
 		<>
@@ -161,11 +161,11 @@ const CardCustom: React.FC = () => {
 						sx={{ alignItems: 'stretch' }}
 					>
 						<MediaCard
-							id={item.id}
-							name={item.name}
-							description={item.description}
-							price={item.price}
-							userID={userID}
+							id={1}
+							name={'item.name'}
+							description={'item.description'}
+							price={'item.price'}
+							userID={1}
 						/>
 					</Grid>
 				))}
@@ -175,56 +175,3 @@ const CardCustom: React.FC = () => {
 }
 
 export default CardCustom
-// Array.from(Array(item))
-
-const itemsProduct = [
-	{
-		id: 1,
-		name: 'Класичний зефір',
-		description:
-			"це ідеальний вибір для любителів традиційного зефіру. Цей зефір має м'яку та повітряну текстуру, а також солодкий смак, який точно сподобається всім.",
-		price: '220 ',
-	},
-	{
-		id: 2,
-		name: "Зефір з м'ятою та лимоном",
-		description:
-			"це відмінний вибір для тих, хто любить освіжаючі та яскраві смаки. Цей зефір містить натуральні екстракти м'яти та лимона, які додають йому освіжаючий та яскравий смак.",
-		price: '225 ',
-	},
-	{
-		id: 3,
-		name: 'Зефір з ваніллю',
-		description:
-			'це ідеальний вибір для любителів ванільного смаку. Цей зефір містить натуральні екстракти ванілі, які додають йому ніжного та солодкого смаку.',
-		price: '230 ',
-	},
-	{
-		id: 4,
-		name: 'Зефір з кокосовою стружкою',
-		description:
-			'це чудовий вибір для тих, хто любить екзотичні уподобання. Цей зефір покритий кокосовою стружкою, яка надає йому неповторного смаку і аромату.',
-		price: '220 ',
-	},
-	{
-		id: 5,
-		name: "Зефір зі смаком м'яти",
-		description:
-			"це чудовий вибір для тих, хто любить свіжість м'яти. Цей зефір містить натуральні екстракти м'яти, які додають йому освіжаючий смак.",
-		price: '215 ',
-	},
-	{
-		id: 6,
-		name: "Зефір із шоколадною глазур'ю",
-		description:
-			"це ідеальний вибір для любителів шоколаду. Цей зефір покритий шоколадною глазур'ю, яка надає йому неповторного смаку і аромату.",
-		price: '210 ',
-	},
-	{
-		id: 7,
-		name: 'Зефір із фруктовим смаком',
-		description:
-			'це відмінний вибір для тих, хто любить фруктові смаки. Цей зефір містить натуральні екстракти фруктів, які додають йому яскравого та свіжого смаку. ',
-		price: '200 ',
-	},
-]

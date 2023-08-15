@@ -2,6 +2,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppDispatch, RootState } from './../index'
 import { AuthResponse } from '@/models/response/AuthResponse';
+// import { iUser } from '@/models/response/iUser';
 
 
 export type AuthType = {
@@ -9,24 +10,17 @@ export type AuthType = {
   password: string;
 };
 
-
-
-export type UserResponseType = {
- tokens:{
-  accessToken: string
-  refreshToken: string
-  }  
-  user: {
+ interface iUser{
   userId: number 
   role: string
   email: string,  
-  isActivated: boolean
-  tel: string | null}
-
+  isActivated: boolean 
 }
 
+ 
+
 type AuthState = {
-  data: UserResponseType | null; 
+  data: iUser | null; 
   session: null | string;
   status: boolean;
   loading: boolean;
@@ -34,7 +28,7 @@ type AuthState = {
 };
 
 const initialState: AuthState = {
-  data: {} as UserResponseType,
+  data: {} as iUser,
   session: null,
   status: false,
   loading: false,
@@ -48,13 +42,19 @@ const authSlice = createSlice({
     loginRequest: (state) => {
       state.loading = true;
     },
-    loginSuccess: (state, action: PayloadAction<AuthResponse>) => {
-      console.log('action.payload:', action.payload)
-    
+    loginSuccess: (state, action: PayloadAction<iUser>) => {     
+      if(!action.payload){
+            return
+          }
       state.data = action.payload;  
       state.status = true;    
       state.loading = false;
       state.error = null;
+    },
+    loginOut: (state, action: PayloadAction<iUser>) => {
+      console.log('loginOut: (state, action: ', action)
+      state.data = action.payload; 
+      state.status = false
     },
     loginFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
@@ -66,12 +66,14 @@ const authSlice = createSlice({
   },
 });
 
-export const { loginRequest, loginSuccess, loginFailure, loginEnd } = authSlice.actions;
+export const { loginRequest, loginSuccess, loginFailure, loginEnd, loginOut } = authSlice.actions;
 
 export default authSlice.reducer;
 
 export const selectUserData = (state: RootState) => state.auth.data;
 export const selectLoading = (state: RootState) => state.auth.loading;
 export const selectStatus = (state: RootState) => state.auth.status;
+
+
 
 

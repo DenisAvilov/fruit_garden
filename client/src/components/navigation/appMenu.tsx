@@ -17,11 +17,19 @@ import { Avatar, ListItemAvatar, Slide, useScrollTrigger } from '@mui/material'
 import PositionedCategory from '../cPositionedCategory'
 import theme from '@/theme'
 import Link from '../cCustomLink'
-import { useSelector } from 'react-redux'
-import { selectStatus } from '@/store/slice/authSlice'
-import auth from '../../pages/api/user/signin'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+	selectLoading,
+	selectStatus,
+	selectUserData,
+} from '@/store/slice/authSlice'
+import { loginOut } from '@/store/slice/authSlice'
+
 import { parseCookies } from 'nookies'
 import { useRouter } from 'next/router'
+import { logOut } from '@/pages/api/user/signin'
+import { iUser } from '@/models/response/iUser'
+import SpinierColor from '../spiner/Spinier'
 
 export const BrighterIconButton = styled(IconButton)(({ theme }) => ({
 	'&:hover': {
@@ -30,6 +38,8 @@ export const BrighterIconButton = styled(IconButton)(({ theme }) => ({
 }))
 
 export default function AppMenu(props?: any) {
+	const dispatch = useDispatch()
+	const loading = useSelector(selectLoading)
 	const sx = props.sx
 
 	const router = useRouter()
@@ -42,9 +52,8 @@ export default function AppMenu(props?: any) {
 		router.push('/basket')
 	}
 
+	const data = useSelector(selectUserData)
 	const status = useSelector(selectStatus)
-	
-	
 
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -66,15 +75,8 @@ export default function AppMenu(props?: any) {
 		handleMobileMenuClose()
 	}
 
-	const logoutt = async () => {
-		const cookies = parseCookies()
-		
-		const rez = await auth.logOut(cookies)
-		
-		handleMenuClose()
-	}
-
 	const menuId = 'primary-search-account-menu'
+
 	const renderMenu = (
 		<Menu
 			anchorEl={anchorEl}
@@ -84,21 +86,39 @@ export default function AppMenu(props?: any) {
 			}}
 			id={menuId}
 			keepMounted
-			// transformOrigin={{
-			// 	vertical: 'bottom',
-			// 	horizontal: 'left',
-			// }}
 			open={isMenuOpen}
 			onClose={handleMenuClose}
 		>
-			<Link href={status ? '/admin' : '/registration'}>
+			<Link
+				href={
+					data?.role === 'ADMIN'
+						? '/admin'
+						: data?.role === 'USER'
+						? '/user'
+						: '/registration'
+				}
+			>
 				<MenuItem onClick={handleMenuClose}>
 					{status ? 'Мій кабінет' : 'Реєстрація'}
 				</MenuItem>
 			</Link>
+
 			{status ? (
 				<Link href='/'>
-					<MenuItem onClick={logoutt}>Вихід</MenuItem>
+					<MenuItem
+						onClick={() => {
+							logOut()
+							const iUser = {
+								userId: 0,
+								role: 'USER',
+								email: ' ',								
+								isActivated: false,
+							}
+							dispatch(loginOut(iUser))
+						}}
+					>
+						Вихід
+					</MenuItem>
 				</Link>
 			) : (
 				<Link href='/login'>
@@ -135,7 +155,7 @@ export default function AppMenu(props?: any) {
 						<SearchIcon />
 					</Badge>
 				</BrighterIconButton>
-				<p>Search</p>
+				<p>Пошук</p>
 			</MenuItem>
 			<MenuItem>
 				<BrighterIconButton
@@ -147,7 +167,7 @@ export default function AppMenu(props?: any) {
 						<ShoppingCartOutlinedIcon color='secondary' />
 					</Badge>
 				</BrighterIconButton>
-				<p>Shopping</p>
+				<p>Карзина</p>
 			</MenuItem>
 			<MenuItem onClick={handleProfileMenuOpen}>
 				<BrighterIconButton
@@ -163,6 +183,9 @@ export default function AppMenu(props?: any) {
 			</MenuItem>
 		</Menu>
 	)
+	const spinierColor = () => {
+		return loading ? <SpinierColor /> : <Box sx={{ height: '4px' }}></Box>
+	}
 
 	const logoImg = '/LOGO.svg'
 
@@ -233,9 +256,9 @@ export default function AppMenu(props?: any) {
 						</Box>
 					</Toolbar>
 				</AppBar>
-
 				{renderMobileMenu}
 				{renderMenu}
+				{spinierColor()}
 			</Box>
 		</>
 	)
