@@ -64,8 +64,7 @@ async getall(brand_id, category_id, smack_id, limits, page) {
    if (categoryIds.length > 0) {
     includeOptions.push({
       model: Category,
-      where: { id: categoryIds },
-      through: { attributes: [] },
+      where: { id: categoryIds },     
     });
     }
 
@@ -77,7 +76,7 @@ async getall(brand_id, category_id, smack_id, limits, page) {
     });
     }
 
-    const queryOptions = includeOptions.length === 0 ? { limit, offset } : { limit, offset, include: includeOptions };
+    const queryOptions = includeOptions.length === 0 ? { limit, offset, include:  [Brand, Category, Smack]} : { limit, offset, include: includeOptions };
 
     const products = await Product.findAndCountAll(queryOptions);
 

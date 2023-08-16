@@ -28,6 +28,7 @@ class ProductController{
   async  getALLProduct(req, res, next){
    try{     
      let {brand_id, category_id, smack_id, limit, page} = req.query
+     console.log('category_id', category_id)
       const product = await productService.getall(brand_id, category_id, smack_id, limit, page)
       return res.json(product)
    }
