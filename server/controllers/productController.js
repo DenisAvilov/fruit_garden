@@ -12,11 +12,7 @@ class ProductController{
        const {img} = req.files        
         console.log('smackId>', name, price, brandId, categoryId, smackId, value)
        
-        //  let arr = smackId.split(",")
-      
-        // console.log('smackId Array.isArray >', arr)
-
-       const product = await productService.create(name, price, brandId, categoryId, smackId, value, img)   
+        const product = await productService.create(name, price, brandId, categoryId, smackId, value, img)   
       
        return res.json(product) 
     }
@@ -27,8 +23,7 @@ class ProductController{
    
   async  getALLProduct(req, res, next){
    try{     
-     let {brand_id, category_id, smack_id, limit, page} = req.query
-     console.log('category_id', category_id)
+     let {brand_id, category_id, smack_id, limit, page} = req.query    
       const product = await productService.getall(brand_id, category_id, smack_id, limit, page)
       return res.json(product)
    }

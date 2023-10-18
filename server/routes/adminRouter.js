@@ -9,7 +9,7 @@ const {body} = require('express-validator')
 
 
 router.get('/', roleMiddleware('ADMIN'), adminController.admin)
-router.get('/check',authMiddleware, userController.check)
+// router.get('/check', userController.check)
 router.delete('/delete/:id([0-9]+)',roleMiddleware('ADMIN'), userController.delete)
 router.get('/getall', roleMiddleware('ADMIN'), userController.getall)
 router.get('/getuser/:id([0-9]+)',authMiddleware, userController.getUser)

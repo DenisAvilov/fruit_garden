@@ -5,7 +5,7 @@ const User = sequelize.define('user',{
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   email: {type: DataTypes.STRING, unique: true},
   password: {type: DataTypes.STRING},  
-  role: {type: DataTypes.STRING, defaultValue: "ADMIN"},
+  role: {type: DataTypes.STRING, defaultValue: "USER"},
   isActivated: {type: DataTypes.BOOLEAN, defaultValue: false},
   activationLink: {type: DataTypes.STRING},
 })
@@ -66,11 +66,19 @@ const ProductInfo = sequelize.define('product_info',{
 })
 
 
-//type 
+//Створюємо категорію товара
 const Category = sequelize.define('category',{
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   name: {type: DataTypes.STRING, unique: true, allowNull: true}  
 })
+//Створюємо підкатегорію товара
+const Subcategory = sequelize.define('subcategory', {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  name: { type: DataTypes.STRING, allowNull: true }
+});
+
+
+
 const Brand = sequelize.define('brand',{
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   name: {type: DataTypes.STRING, unique: true, allowNull: true}  
@@ -163,6 +171,11 @@ User.belongsToMany(Product, {through: Rating, onDelete: 'CASCADE'})
 // это обеспечит возможность любых include при запросах findAll, findOne, findByPk
 //-----
 
+
+// Встановлюємо зв'язок між категорією і підкатегорією (один-до-багатьох)
+Category.hasMany(Subcategory);
+Subcategory.belongsTo(Category);
+
 module.exports = {
   User,
   Token,
@@ -172,13 +185,14 @@ module.exports = {
   ProductBrand,
   Product,
   Category,
+  Subcategory,
   Brand,  
   Rating,
   ProductInfo,
   Smack,
   UserFio,
   Contact,
-  Social
+  Social  
 } 
 
 // unique: true // уникальность

@@ -6,7 +6,7 @@ const UserDto = require('../dtos/userDto')
 class RefreshService{
    async refresh(refreshToken){
     if(!refreshToken){
-      throw ApiError.UnauthorizedError({message: 'user servise refreshToken netttt'})
+      throw ApiError.UnauthorizedError('В куках нема refreshToken')
     }   
    
     const userData = tokenService.validateRefreshToken(refreshToken)    

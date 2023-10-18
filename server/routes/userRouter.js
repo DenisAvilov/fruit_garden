@@ -16,7 +16,8 @@ router.post('/sign-in',
        userController.login
        ) 
 router.get('/activate/:link',  userController.activate)
-router.get('/check',authMiddleware, userController.check)
+// router.get('/check',authMiddleware, userController.check)
+// router.get('/check',  userController.check)
 router.delete('/delete/:id([0-9]+)', roleMiddleware('ADMIN'), userController.delete)
 router.post('/logout', userController.logout)
 

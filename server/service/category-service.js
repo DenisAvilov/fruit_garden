@@ -1,4 +1,4 @@
-const {Category} = require('../models/models') 
+const {Category, Subcategory} = require('../models/models') 
 class CategoryService{
   async create(name){    
     const category = await Category.create({name})
@@ -13,13 +13,24 @@ class CategoryService{
     const updateCategory = category.update({name})
     return updateCategory
   }
-  async delete(id){    
-    const category = await Category.findByPk(id)
-     if (!category) {
-            throw new Error('Категория не найдена в БД')
+
+  async delete(id){ 
+    try{
+        const category = await Category.findByPk(id)   
+        // Видаліть категорію, оскільки вона не має підкатегорій   
+        console.log('category', category)
+     if (category == null) {
+              return null;
         } 
-     category.destroy()
-    return category
+         await category.destroy();
+     return category;
+    }
+    catch(e){
+           throw new Error('Помилка при видаленні категорії.');
+    }
   }
+
+  
+  
 }
 module.exports = new CategoryService()
