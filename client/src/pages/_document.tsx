@@ -1,5 +1,3 @@
-// pages/_document.tsx
-
 import * as React from 'react'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 import createEmotionServer from '@emotion/server/create-instance'
@@ -14,9 +12,10 @@ export default class MyDocument extends Document {
 					<meta name='theme-color' content={theme.palette.primary.main} />
 					<link rel='shortcut icon' href='/static/favicon.ico' />
 					<link
+						href='https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap'
 						rel='stylesheet'
-						href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap'
 					/>
+
 					{(this.props as any).emotionStyleTags}
 				</Head>
 				<body>

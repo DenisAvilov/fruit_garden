@@ -20,8 +20,8 @@ import { useSelector } from 'react-redux'
 import {
 	Product,
 	productSuccess,
-	selectCategory,
-	selectSmak,
+	// selectCategory,
+	// selectSmak,
 } from '@/store/slice/productSlice'
 import { Grid, Input, MenuItem, Select, TextField } from '@mui/material'
 import { PhotoCamera } from '@mui/icons-material'
@@ -89,8 +89,10 @@ const validationSchema = yup.object({
 })
 
 const ProductDialog: React.FC<ProductDialogProps> = (props) => {
-	const categories = useSelector(selectCategory)
-	const smak = useSelector(selectSmak)
+	// const categories = useSelector(selectCategory)
+	const categories = [{ id: 1, name: 'string' }]
+	// const smak = useSelector(selectSmak)
+	const smak = [{ id: 1, name: 'string' }]
 	const [info, setInfo] = React.useState<Info[]>([])
 
 	const dispatch = useDispatch()
@@ -99,12 +101,12 @@ const ProductDialog: React.FC<ProductDialogProps> = (props) => {
 	const initialValues: Product = {
 		id: 0,
 		name: '',
-		price: 0,
-		description: '',
+		price: '0',
 		category: '',
+		Product: '',
 		smak: '',
-		img: undefined,
-		rating: undefined,
+		img: 'undefined',
+		rating: 3,
 		info: [],
 	}
 
@@ -113,7 +115,7 @@ const ProductDialog: React.FC<ProductDialogProps> = (props) => {
 		validationSchema: validationSchema,
 		onSubmit: async (values: Product, { setErrors, resetForm }) => {
 			values.id = new Date().getMilliseconds()
-		
+
 			dispatch(productSuccess(values))
 		},
 	})
@@ -131,7 +133,7 @@ const ProductDialog: React.FC<ProductDialogProps> = (props) => {
 
 	const removeInfo = (id: number) => {
 		const updatedInfo = info.filter((i) => i.number !== id)
-		const updatedValues = formik.values.info.filter((i) => i.number !== id)
+		const updatedValues = formik.values.info.filter((i: any) => i.number !== id)
 
 		setInfo(updatedInfo)
 		formik.setFieldValue('info', updatedValues)
@@ -407,7 +409,6 @@ const ProductDialog: React.FC<ProductDialogProps> = (props) => {
 											variant='standard'
 											name={'info[' + index + '].title'}
 											value={formik.values.info[index]?.title}
-										
 											onChange={formik.handleChange}
 										/>
 										<Typography color='error'>

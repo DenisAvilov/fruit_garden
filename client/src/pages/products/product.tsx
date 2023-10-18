@@ -11,30 +11,13 @@ type PropsProduct = {
 	categoryRoute?: string
 }
 
-const ProductOnePage: React.FC<PropsProduct> = ({
-	product,
-	category,
-	categoryRoute,
-}) => {
-	const dispatch = useDispatch()
-
-	const Item = styled(Paper)(({ theme }) => ({
-		backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-		...theme.typography.body2,
-		// padding: theme.spacing(1),
-		textAlign: 'center',
-		color: theme.palette.text.secondary,
-		marginLeft: '17px',
-		marginBottom: '20px',
-	}))
-
+const ProductOnePage: React.FC<PropsProduct> = ({ product }) => {
 	const router = useRouter()
 
 	const handleClick = () => {
 		router.push('/categories')
 	}
 
-	console.log(categoryRoute)
 	return (
 		<>
 			<Box sx={{ flexGrow: 1, marginTop: '40px' }}>
@@ -90,7 +73,7 @@ const ProductOnePage: React.FC<PropsProduct> = ({
 							<Typography variant='h6' fontWeight={600} mr={2}>
 								Опис:
 							</Typography>
-							<Typography variant='body2'> {product.description}</Typography>
+							<Typography variant='body2'> product.description</Typography>
 						</Box>
 						<Box
 							sx={{

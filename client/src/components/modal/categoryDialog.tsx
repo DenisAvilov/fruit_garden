@@ -24,8 +24,8 @@ import {
 	categoryRemove,
 	categoryUpdate,
 	Category,
-	selectCategory,
-	selectLoading,
+	// selectCategory,
+	// selectLoading,
 	loadingStart,
 	loadingEnd,
 } from '@/store/slice/productSlice'
@@ -59,8 +59,10 @@ const validationSchema = yup.object({
 const CategoryDialog: React.FC<ProductDialogProps> = (props) => {
 	const { show, onHide } = props
 	const dispatch = useDispatch()
-	const categoryData = useSelector(selectCategory)
-	const loading = useSelector(selectLoading)
+	// const categoryData = useSelector(selectCategory)
+	const categoryData = [{ name: 'lolo', id: 2 }]
+	// const loading = useSelector(selectLoading)
+    const loading = true
 	const [active, setActive] = React.useState<boolean>(false)
 	const [categoryList, setCategoryList] =
 		React.useState<Category[]>(categoryData)

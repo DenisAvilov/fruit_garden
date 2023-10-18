@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import type { NextPage } from 'next'
 import Container from '@mui/material/Container'
-import AppMenu from '../components/navigation/appMenu'
+import AppMenu from '../components/navigation/menu'
 import CSection from '@/components/cSection'
 import PageGallery from '@/components/mainPageTopProduct/mainPageGallery'
 import useScrollTrigger from '@mui/material/useScrollTrigger'
@@ -38,31 +38,10 @@ const Lending: NextPage = () => {
 		<>
 			<CSection
 				sx={{
-					display: 'flex',
-					flexDirection: 'column',
-					justifyContent: 'center',
-					maxHeight: '100vh',
 					padding: '80px 0 50px 0',
-					// '&:after': {
-					// 	position: 'absolute',
-					// 	content: `' '`,
-					// 	top: 0,
-					// 	left: 0,
-					// 	bottom: 0,
-					// 	right: 0,
-					// 	// backgroundColor: '#f4e1e1ff',
-					// 	backgroundImage: `url('/product/loonapix.png')`,
-					// 	backgroundSize: '35%',
-					// 	backgroundRepeat: 'no-repeat',
-					// 	backgroundPositionX: 'right',
-					// 	backgroundPositionY: 'center',
-					// 	opacity: '0.5',
-					// },
 				}}
 				backgroundColor='linear-gradient(0deg, #749299ff, #f4e1e1ff, #c4c5baff, #83a6b1ff, #747478ff)'
 				imagePath='/product/top-fon.jpeg'
-				// imagePath='/product/prozra4nost.jpg'
-				// afterBackgroundImage='/product/top-fon.jpeg'
 			>
 				<Container
 					maxWidth='lg'
@@ -116,13 +95,7 @@ const Lending: NextPage = () => {
 				</Container>
 			</CSection>
 			<CSection backgroundColor='linear-gradient(0deg, #749299ff, #f4e1e1ff, #c4c5baff, #83a6b1ff, #747478ff)'>
-				<Container
-					maxWidth='lg'
-					sx={{
-						position: 'relative',
-						// padding: '80px 0 50px 0',
-					}}
-				>
+				<Container maxWidth='lg' sx={{ position: 'relative' }}>
 					<Typography
 						component='h2'
 						variant='h5'
@@ -144,7 +117,6 @@ const Lending: NextPage = () => {
 					>
 						Пропонуємо спробувати
 					</Typography>{' '}
-					<CardsCustom item={3} />
 				</Container>
 			</CSection>
 			<CSection
@@ -234,27 +206,14 @@ const Lending: NextPage = () => {
 					</Box>
 				</Container>
 			</CSection>
-			<CSection
-				backgroundColor='linear-gradient(315deg, #749299ff, #747478ff)'
-				// imagePath='/happy_1280.jpg'
-				sx={
-					{
-						// position: 'relative',
-					}
-				}
-			>
+			<CSection backgroundColor='linear-gradient(315deg, #749299ff, #747478ff)'>
 				<Container
 					className={style.parallax}
 					maxWidth='lg'
 					sx={{
-						// position: 'relative',
-						// backgroundImage: `url('/product/white-zephyr.jpg')`,
 						backgroundSize: 'cover',
 						backgroundRepeat: 'no-repeat',
 						padding: '80px 0 50px 0',
-						height: '100vh',
-
-						// color: '#ffff',
 						'&:after': {
 							position: 'absolute',
 							content: `' '`,
@@ -291,30 +250,6 @@ const Lending: NextPage = () => {
 				backgroundColor='linear-gradient(315deg, #749299ff, #f4e1e1ff, #c4c5baff, #83a6b1ff, #747478ff)'
 				className={style.parallax}
 				imagePath='/happy_1280.jpg'
-				sx={
-					{
-						// '&:after': {
-						// 	position: 'absolute',
-						// 	content: `' '`,
-						// 	top: 0,
-						// 	left: 0,
-						// 	bottom: 0,
-						// 	right: 0,
-						// 	backgroundColor: '#000000',
-						// 	opacity: '0.5',
-						// },
-						// '&:before': {
-						// 	position: 'absolute',
-						// 	content: `' '`,
-						// 	top: '100px',
-						// 	left: '100px',
-						// 	bottom: '100px',
-						// 	right: '100px',
-						// 	border: '10px solid #ffffff',
-						// 	// opacity: '0.5',
-						// },
-					}
-				}
 			>
 				<Container
 					maxWidth='lg'
@@ -393,9 +328,7 @@ const Lending: NextPage = () => {
 						position: 'relative',
 						padding: '80px 0 50px 0',
 					}}
-				>
-					<CardsCustom item={6} /> <ScrollToTopButton />
-				</Container>
+				></Container>
 			</CSection>
 		</>
 	)

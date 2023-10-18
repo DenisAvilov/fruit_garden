@@ -8,6 +8,10 @@ const nextConfig = {
   //   // signUpUrl: 'http://signUp.localhost:3000'
    
   // },
+  //  experimental: {
+  //   appDir: true,
+  //   typedRoutes: true,
+  // },
    sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },

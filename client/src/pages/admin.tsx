@@ -1,12 +1,12 @@
 import SmakDialog from '../components/modal/smakDialog'
 import CategoryDialog from '@/components/modal/categoryDialog'
 import ProductDialog from '@/components/modal/productDialog'
-import AppMenu from '@/components/navigation/appMenu'
+import AppMenu from '@/components/navigation/menu'
 import { Button, Container, Grid, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { admin } from './api/admin'
-import { selectUserData, selectLoading } from '@/store/slice/authSlice'
+// import { selectUserData, selectLoading } from '@/store/slice/authSlice'
 import { iUser } from '@/models/response/iUser'
 import { useRouter } from 'next/router'
 
@@ -16,7 +16,13 @@ const Admin: React.FC = () => {
 	const [categoryVisible, setCategoryVisible] = useState<boolean>(false)
 
 	const dispatch = useDispatch()
-	const data = useSelector(selectUserData)
+	// const data = useSelector(selectUserData)
+	const data = {
+		userId: 1,
+		role: 'ADMIN',
+		email: 'string',
+		isActivated: true,
+	}
 	const router = useRouter()
 
 	const redirectToHomePage = () => {

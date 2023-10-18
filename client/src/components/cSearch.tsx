@@ -4,7 +4,7 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import InputBase from '@mui/material/InputBase'
 import { styled, alpha } from '@mui/material/styles'
 import { IconButton } from '@mui/material'
-import { BrighterIconButton } from './navigation/appMenu'
+import { BrighterIconButton } from './navigation/menu'
 import theme from '@/theme'
 
 const Search = styled('div')(({ theme }) => ({

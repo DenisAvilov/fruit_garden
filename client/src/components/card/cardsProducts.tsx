@@ -12,12 +12,7 @@ import React from 'react'
 import style from './cardsProducts.module.scss'
 import theme from '@/theme'
 import { useRouter } from 'next/router'
-import { useSelector } from 'react-redux'
-import { productSuccess, selectProduct } from '@/store/slice/productSlice'
-import { selectUserData } from '@/store/slice/authSlice'
 import basketClient from './../../pages/api/basket/basket'
-import { useDispatch } from 'react-redux'
-import ProductApi from './../../pages/api/product/product'
 
 function MediaCard(props: any) {
 	const { id, name, description, price, userID } = props
@@ -126,23 +121,7 @@ function MediaCard(props: any) {
 }
 
 const CardCustom: React.FC = () => {
-	const dispatch = useDispatch()
-	// React.useEffect(() => {
-	// 	const products = async () => {
-	// 		try {
-	// 			const product = await ProductApi.productGetAll()
-	// 			console.log('product useEffect', product.data.rows)
-	// 			dispatch(productSuccess(product.data.rows))
-	// 		} catch (e) {
-	// 			console.log('await ProductApi.productGetAll( ) client', e)
-	// 			return e
-	// 		}
-	// 	}
-	// 	products()
-	// }, [dispatch])
-
-	const products = useSelector(selectProduct)
-	// const userID = useSelector(selectUserData)
+	const products = [{ item: 1, index: 2 }]
 
 	return (
 		<>

@@ -3,11 +3,11 @@ import { styled } from '@mui/material/styles'
 import { Button, Menu, MenuItem, Typography } from '@mui/material'
 import React from 'react'
 
-const StyledSpan = styled(Link)`
+const StyledSpans = styled(Link)`
 	${({ theme, sx }) => `
 	  ${sx};
 	  text-decoration: none;
-    color: ${theme.palette.primary.dark};		
+    color: ${theme.palette.text.primary};		
     &:hover {
      
     }
@@ -21,21 +21,21 @@ const StyledSpan = styled(Link)`
   `}
 `
 
-type CustomLinkProps = {
+type LinkMagic = {
 	href: string
 	children: React.ReactNode
 	sx?: object
 	style?: string
 }
 
-const CustomLink = ({ href, children, sx, style }: CustomLinkProps) => {
+const LinkMagic = ({ href, children, sx, style }: LinkMagic) => {
 	return (
-		<Button className={style}>
-			<StyledSpan href={href} passHref>
-				{children}
-			</StyledSpan>
-		</Button>
+		// <Button className={style}>
+		<StyledSpans href={href} passHref>
+			{children}
+		</StyledSpans>
+		// </Button>
 	)
 }
 
-export default CustomLink
+export default LinkMagic

@@ -9,8 +9,6 @@ import Typography from '@mui/material/Typography'
 import CloseIcon from '@mui/icons-material/Close'
 import Slide from '@mui/material/Slide'
 import { TransitionProps } from '@mui/material/transitions'
-import Box from '@mui/material/Box'
-import Input from '@mui/material/Input'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import InputLabel from '@mui/material/InputLabel'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -25,7 +23,6 @@ import {
 	removeSmak,
 	updateSmak,
 	Smak,
-	selectSmak,
 } from '@/store/slice/productSlice'
 
 import { useSelector } from 'react-redux'
@@ -61,9 +58,9 @@ const validationSchema = yup.object({
 const SmakDialog: React.FC<ProductDialogProps> = (props) => {
 	const { show, onHide } = props
 	const dispatch = useDispatch()
-	const smakData = useSelector(selectSmak)
+	// const smakData = useSelector(selectSmak)
 	const [active, setActive] = React.useState<boolean>(false)
-	const [smakList, setSmakList] = React.useState<Smak[]>(smakData)
+	const [smakList, setSmakList] = React.useState<Smak[]>([])
 	const [activeId, setActiveId] = React.useState<number | null>(null)
 
 	const formik = useFormik({
@@ -75,7 +72,6 @@ const SmakDialog: React.FC<ProductDialogProps> = (props) => {
 			alert(values.smakName)
 			const smak = { id: new Date().getTime(), name: values.smakName }
 			dispatch(smakSuccess(smak))
-		
 		},
 	})
 	const formikChange = useFormik({

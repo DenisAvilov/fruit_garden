@@ -13,7 +13,7 @@ import { iUser } from "@/models/response/iUser";
 export const  singUp =  async (email: string, password: string ): Promise<iUser> => {
 
     try {
-      const {data} = await $host.post<AuthResponse>("/user/signup", {email, password, role: 'ADMIN'});   //ADMIN,USER
+      const {data} = await $host.post<AuthResponse>("/user/sign-up", {email, password, role: 'ADMIN'});   //ADMIN,USER
       
       localStorage.setItem('token', data.tokens.accessToken)  
       return  data.user 
@@ -27,7 +27,7 @@ export const  singUp =  async (email: string, password: string ): Promise<iUser>
 
 export const  signIn =  async (values: AuthType): Promise<iUser> => {  
     try {
-      const {data} = await $host.post<AuthResponse>("/user/signin", values);       
+      const {data} = await $host.post<AuthResponse>("/user/sign-in", values);       
       localStorage.setItem('token', data.tokens.accessToken)      
       return data.user      
     } catch (error: any) {

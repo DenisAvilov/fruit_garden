@@ -1,79 +1,32 @@
 // нашa логикa авторизации.
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppDispatch, RootState } from './../index'
-import { AuthResponse } from '@/models/response/AuthResponse';
-// import { iUser } from '@/models/response/iUser';
 
-
-export type AuthType = {
+export type Auth = {
   email: string;
   password: string;
 };
 
- interface iUser{
-  userId: number 
-  role: string
-  email: string,  
-  isActivated: boolean 
-}
-
- 
-
-type AuthState = {
-  data: iUser | null; 
-  session: null | string;
-  status: boolean;
-  loading: boolean;
-  error: string | null;
-};
-
-const initialState: AuthState = {
-  data: {} as iUser,
-  session: null,
-  status: false,
-  loading: false,
-  error: null,
-};
+const initialState: Auth = {
+    email: 'йц',
+    password: 'йцйц'
+  };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    loginRequest: (state) => {
-      state.loading = true;
-    },
-    loginSuccess: (state, action: PayloadAction<iUser>) => {     
-      if(!action.payload){
-            return
-          }
-      state.data = action.payload;  
-      state.status = true;    
-      state.loading = false;
-      state.error = null;
-    },
-    loginOut: (state, action: PayloadAction<iUser>) => {
-      console.log('loginOut: (state, action: ', action)
-      state.data = action.payload; 
-      state.status = false
-    },
-    loginFailure: (state, action: PayloadAction<string>) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-     loginEnd: (state) => {
-      state.loading = false;
-    },
+  
+    loginSuccess: (state, action: PayloadAction<Auth>) => {     
+     state.email = action.payload.email
+     state.password = action.payload.password
+    }, 
   },
 });
 
-export const { loginRequest, loginSuccess, loginFailure, loginEnd, loginOut } = authSlice.actions;
-
+export const { loginSuccess } = authSlice.actions;
 export default authSlice.reducer;
 
-export const selectUserData = (state: RootState) => state.auth.data;
-export const selectLoading = (state: RootState) => state.auth.loading;
-export const selectStatus = (state: RootState) => state.auth.status;
-
-
+// Определите тип автоматически на основе authSlice.reducer
+export type AuthState = ReturnType<typeof authSlice.reducer>;
 
 

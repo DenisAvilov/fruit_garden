@@ -11,6 +11,10 @@ type Info = {
 }
 
 export type Product = {
+		info: any;
+		category: any;
+		smak: any;
+		description: unknown;
     brandId: number
     categoryId: number
     id: number
@@ -64,14 +68,15 @@ const initialState: PropsTypes = {
 		id: 1,
 		img: '',
 		name: 'Класичний зефір',
-    brandId: 0,
-    categoryId: 1,
+    categoryId: 2,
+    category: 'test category',
     price: '',
     rating: 0,
-		// description:
-		// 	"це ідеальний вибір для любителів традиційного зефіру. Цей зефір має м'яку та повітряну текстуру, а також солодкий смак, який точно сподобається всім.",
-		// smak: 'Полуниці',
-		// info: 	[]
+    smak: '',
+    brandId: 0,
+		description:
+			"це ідеальний вибір для любителів традиційного зефіру. Цей зефір має м'яку та повітряну текстуру, а також солодкий смак, який точно сподобається всім.",
+		info: 	[]
 	},
   ], 
   category: [
@@ -162,11 +167,11 @@ export const {
    loadingEnd, 
 	} = productSlice.actions;
 export default productSlice.reducer;
-export const selectProduct = (state: RootState) => state.product.product;
-export const selectCategory = (state: RootState) => state.product.category;
-export const selectSmak = (state: RootState) => state.product.smak;
-export const  sliceIdCategory = (state: RootState) => state.product.idCategory;
-export const selectLoading = (state: RootState) => state.product.loading;
+// export const selectProduct = (state: RootState) => state.product.product;
+// export const selectCategory = (state: RootState) => state.product.category;
+// export const selectSmak = (state: RootState) => state.product.smak;
+// export const  sliceIdCategory = (state: RootState) => state.product.idCategory;
+// export const selectLoading = (state: RootState) => state.product.loading;
 
 // export const selectLoading = (state: RootState) => state.auth.loading;
 // export const selectStatus = (state: RootState) => state.auth.status;

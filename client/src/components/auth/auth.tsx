@@ -13,24 +13,11 @@ import * as yup from 'yup'
 import Link from 'next/link'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
-import {	
-	loginSuccess,
-	loginFailure,
-	loginEnd,
-	selectStatus,
-	// selectLoading,
-} from './../../store/slice/authSlice'
+import { loginSuccess } from './../../store/slice/authSlice'
 
 import theme from '@/theme'
 import { signIn, singUp } from '../../pages/api/user/signin'
 import { useRouter } from 'next/router'
-import { AuthType } from '@/types/user'
-import { isAxiosError } from 'axios'
-
-type MyFormValues = {
-	email: string
-	password: string
-}
 
 function Copyright(props: any) {
 	return (
@@ -72,7 +59,8 @@ const SignInSide: React.FC<Props> = (props: Props) => {
 
 	// console.log('isLogin:', isLogin)
 
-	const status = useSelector(selectStatus)
+	// const status = useSelector(selectStatus)
+	const status = false
 	const formik = useFormik({
 		initialValues: {
 			email: '',
@@ -81,7 +69,6 @@ const SignInSide: React.FC<Props> = (props: Props) => {
 		},
 		validationSchema: validationSchema,
 		onSubmit: async (values, { setErrors, resetForm }) => {
-			
 			const click = async (value: { email: string; password: string }) => {
 				try {
 					if (!isLogin) {
@@ -90,13 +77,13 @@ const SignInSide: React.FC<Props> = (props: Props) => {
 						if (typeof user === 'string') {
 							return setErrors({ serverError: user })
 						}
-						dispatch(loginSuccess(user))
+						// dispatch(loginSuccess(user))
 					} else {
 						const user = await signIn(value)
 						if (typeof user === 'string') {
 							return setErrors({ serverError: user })
 						}
-						dispatch(loginSuccess(user))
+						// dispatch(loginSuccess(user))
 					}
 				} catch (e: any) {
 					console.log('e auth', e)

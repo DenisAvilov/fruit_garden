@@ -11,11 +11,23 @@ const theme = createTheme({
 // $ash-gray: #c4c5baff;
 // $cadet-gray-2: #83a6b1ff;
 // $dim-gray: #747478ff;
+  typography: {
+    fontFamily:`Caveat, cursive`,
+  },
   
+  // components: {
+  //   MuiCssBaseline: {
+  //     styleOverrides: `
+  //      @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap');
+  //     `,
+  //   },
+  // },
+
   palette: {
     primary: {
     main: '#8ea8ae52',//вершний и нижний колонтикул
-    light:'#c4c5baff',    
+    light:'#c4c5baff',
+    dark: 'rgb(99 117 121);'    
     },
     secondary: {
      

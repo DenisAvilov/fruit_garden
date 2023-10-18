@@ -1,57 +1,28 @@
-// pages/_app.tsx
-
-import * as React from 'react'
 import Head from 'next/head'
+import * as React from 'react'
 import { AppProps } from 'next/app'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { CacheProvider, EmotionCache, Global } from '@emotion/react'
 import theme from '../theme'
 import createEmotionCache from '../createEmotionCache'
-import SmoothScroll from '@/components/scrollToHide/smoothScroll'
-const globalStyles = require('../styles/globals.css')
-import { Provider, useDispatch, useSelector } from 'react-redux'
-import { createWrapper } from 'next-redux-wrapper'
-import ProductApi from './api/product/product'
-import { store } from '../store'
-import {
-	loginRequest,
-	loginSuccess,
-	selectLoading,
-} from '@/store/slice/authSlice'
-import { checkRefresh } from './api/index'
-import { productSuccess } from '@/store/slice/productSlice'
-
+import { wrapper } from '../store' // Импортируйте wrapper из вашего файла index.ts
+import { Provider } from 'react-redux' // Импортируйте Provider из Redux Toolkit
+import Layout from '@/components/Layout'
+import { useRouter } from 'next/router'
 const clientSideEmotionCache = createEmotionCache()
+import '../styles/globals.scss'
 
 interface MyAppProps extends AppProps {
 	emotionCache?: EmotionCache
 }
 
-const wrapper = createWrapper(() => store)
+const App = ({ Component, ...rest }: MyAppProps) => {
+	const { store, props } = wrapper.useWrappedStore(rest)
+	const { emotionCache = clientSideEmotionCache, pageProps } = props
+	const { pathname } = useRouter()
 
-function MyApp(props: MyAppProps) {
-	const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
-	const dispatch = useDispatch()
-	const loading = useSelector(selectLoading)
-
-	React.useEffect(() => {
-		const token = localStorage.getItem('token')
-		if (token) {
-			dispatch(loginRequest())
-			const fetchData = async () => {
-				try {
-					const data = await checkRefresh()
-					if (typeof data === 'object') {
-						dispatch(loginSuccess(data))
-					}
-				} catch (error) {
-					return error
-				}
-			}
-			fetchData()
-		}
-	}, [dispatch])
+	const routes = ['/registration', '/login', '/lending']
 
 	return (
 		<Provider store={store}>
@@ -61,17 +32,18 @@ function MyApp(props: MyAppProps) {
 				</Head>
 
 				<ThemeProvider theme={theme}>
-					{/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-					{/* <SmoothScroll /> */}
-					<Global styles={globalStyles} />
 					<CssBaseline />
-					<Component {...pageProps} />
+					{routes.includes(pathname) ? (
+						<Component {...pageProps} />
+					) : (
+						<Layout>
+							<Component {...pageProps} />
+						</Layout>
+					)}
 				</ThemeProvider>
 			</CacheProvider>
 		</Provider>
 	)
 }
 
-// const makeStore = () => store
-
-export default wrapper.withRedux(MyApp)
+export default App

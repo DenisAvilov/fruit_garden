@@ -77,4 +77,4 @@ export const {
   removeItem,
 } = basketSlice.actions;
 export  default basketSlice.reducer;
-export const  basketStore = (state: RootState) => state.basket.product;
+// export const  basketStore = (state: RootState) => state.basket.product;

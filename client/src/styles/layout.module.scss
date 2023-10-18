@@ -1,0 +1,10 @@
+.root{
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 70px 1fr auto;
+  grid-gap: 10px 0;
+  align-items: stretch;
+  .header{}
+  .children{}
+  .footer{}
+}
